@@ -4,6 +4,7 @@
 #+PROPERTY: header-args:emacs-lisp :tangle init.el
 
 #+SETUPFILE: ./theme-readtheorg.setup
+#+EXPORT_FILE_NAME: index.html
 
 #+AUTO_TANGLE: t
 
