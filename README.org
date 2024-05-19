@@ -1,0 +1,1903 @@
+#+TITLE: My literate EMACS config
+
+#+STARTUP: content
+#+PROPERTY: header-args:emacs-lisp :tangle init.el
+
+#+SETUPFILE: ./theme-readtheorg.setup
+
+#+AUTO_TANGLE: t
+
+Welcome to my detailed literate [[https://www.gnu.org/software/emacs/][EMACS]] (Editor for Middle-Aged Computer
+Scientists) configuration!
+
+I'm using EMACS for several years now and I have tried multiple
+different ways of adopting it. I started with [[https://spacemacs.org/][Spacemacs]]. Then I tried
+to write my own configuration framework. Also I had multiple attempts
+to write configuration from scratch (like here). I tried to give up
+and use VSCode, but it was too late for me and I returned to EMACS. I
+used [[https://github.com/doomemacs/doomemacs][DOOM EMACS]] for around a year or more and it is still my favourite
+distribution. If you looking for Vim-style EMACS distribution I highly
+recommend to try DOOM EMACS. But I found that I want to have more
+control over my configuration and it's more rewarding for me to write
+it from scratch. So I'm here again. And this time I feel that I
+finally discovered the approach that fits me the best. And I'm happy
+to share it with you!
+
+Composed in [[https://orgmode.org/][ORG mode]], this document amalgamates both configuration
+code and reasoning behind. Most of the code is [[https://orgmode.org/manual/Extracting-Source-Code.html][tangled]] into the
+~init.el~ file, with some exceptions (~early-init.el~, ~templates.eld~
+for example). A helpful feature from [[https://github.com/yilkalargaw/org-auto-tangle][Org Auto-Tangle]] automatically
+regenerates all files whenever this document is modified and saved.
+
+Several essential aspects of my configuration are not Elisp code, but
+[[https://nixos.org/][Nix]] code for [[https://github.com/nix-community/home-manager][Home Manager]]. I keep it in [[https://github.com/ffloyd/nix][a separate repository]] and all
+EMACS-related configration is stored in [[https://github.com/ffloyd/nix/blob/main/hm/emacs.nix][the separate module]].
+
+The document structure consists of three primary sections, each is a
+high-level configuration goal. Relevant configurations are grouped
+together under subsections. When possible I name subsections with the
+focus on user behaviours and experience rather than technical details.
+
+All functions, variables and modes that are defined in this document
+are prefixed with ~my-~ to avoid conflicts with other packages.
+
+I do not use lazy loading in this configuration. Modern machines are
+fast enough to load everything at startup. So I decided to avoid all
+the complexity that heavy usage of lazy loading introduces.
+
+This config primarily focuses on configuring EMACS for MacOS
+environment, but from time to time I make it more adjusted for my
+NixOS setup.
+
+* Make it a decent configurable editor
+Vanilla EMACS doesn't act and look like a modern editor out of the
+box. This section focuses on making it more user-friendly and visually
+appealing. In addition, it includes some configuration helpers to
+simplify configuration process in the later sections.
+
+The last subsection in this section is dedicated to /leader/
+keybindings. Other keybindings are defined in the corresponding
+subsections.
+
+** It should be obvious that /generated files/ must not be edited
+Disclaimer for ~early-init.el~:
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+;; WARNING!
+;;
+;; This file is a result of `org-babel-tangle` execution on `.emacs.d/README.org`.
+;; Don't change it manually.
+#+END_SRC
+
+Disclaimer for ~init.el~:
+
+#+BEGIN_SRC emacs-lisp
+;; WARNING!
+;;
+;; This file is a result of `org-babel-tangle` execution on `.emacs.d/README.org`.
+;; Don't change it manually.
+#+END_SRC
+
+Disclaimer for ~templates.eld~:
+
+#+BEGIN_SRC lisp-data :tangle templates.eld
+;; WARNING!
+;;
+;; This file is a result of `org-babel-tangle` execution on `.emacs.d/README.org`.
+;; Don't change it manually.
+#+END_SRC
+
+** Improve /native compilation/ expiriense
+Native compilation can provide a signifiant speedup and enabled by
+deafult in modern EMACS versions, but I don't want to see native
+compilation warnings because in the most cases it's just distraction:
+
+#+BEGIN_SRC emacs-lisp
+(setq native-comp-async-report-warnings-errors nil)
+#+END_SRC
+
+** Improve /package/ management experience
+This config uses [[https://github.com/raxod502/straight.el][straight.el]] for downloading packages instead of
+~package.el~ (which is part of EMACS). ~straight~ does git checkouts
+instead of archive downloads. It leads to better discoverability,
+simplifies patching and contributing to downloaded packages. Also it
+allows to use lockfiles that enables reproducible builds.
+
+I disable standard packaging system in ~early-init.el~. It is a bit
+more natural than disabling it in ~init.el~. Also I instructing EMACS
+to load newer files when alternatives exist. It is something that
+works better when set early.
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+(setq package-enable-at-startup nil)
+(setq load-prefer-newer t)
+#+END_SRC
+
+To enable ~straight~ I need to copy-paste this bootstraping code from
+~straight~'s [[https://github.com/radian-software/straight.el?tab=readme-ov-file#bootstrapping-straightel][README]]:
+
+#+BEGIN_SRC emacs-lisp
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+#+END_SRC
+
+I tried different options for package configuration management:
+[[https://github.com/jwiegley/use-package][use-package]], [[https://github.com/conao3/leaf.el][leaf]] and custom helpers. ~use-package~ is a standard
+configuration macro now, it even became part of EMACS. ~leaf~ is its
+alternative: cleaner, easier to extend, but adoption in community is
+relatively low (to be honest, I'd prefer ~leaf~ to be part of EMACS,
+not ~use-package~). But both of them hide configuration details and
+focus on configuring packages rather than configuring features (one
+package can be used to address multiple features, one feature can be
+implemented via multiple packages). That's why I decided to use a set
+of small custom helpers and avoid ~use-package~ or ~leaf~.
+
+#+BEGIN_SRC emacs-lisp
+;; NO HELPERS YET
+#+END_SRC
+
+[[https://orgmode.org/][ORG]] should be loaded as early as possible to avoid conflicts with
+preinstalled ORG:
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'org)
+(require 'org)
+#+END_SRC
+
+** Writing /elisp/ functions should be convinient
+"Missing parts of the language": libraries that are used by majority
+of developers.
+
+[[https://github.com/magnars/dash.el][List transformations]]:
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'dash)
+(require 'dash)
+#+END_SRC
+
+[[https://github.com/rejeep/f.el][File operations]]:
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'f)
+(require 'f)
+#+END_SRC
+
+[[https://github.com/magnars/s.el][String manipulations]]:
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 's)
+(require 's)
+#+END_SRC
+
+** Optimize default /limits/ for modern hardware
+Default Garbage Collector behaviour and limits are too aggressive for
+modern PCs and can lead to freezes. [[https://github.com/emacsmirror/gcmh][Garbage Collector Magic Hack]]
+library introduces adaptive approach to GC. It's better to enable it
+early.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'gcmh)
+(require 'gcmh)
+(gcmh-mode 1)
+#+END_SRC
+
+Some libraries like ~lsp~ or ~eglot~ have to work with external
+processes that produce a lot of output. By default EMACS has a way too
+low limit for process output.
+
+#+BEGIN_SRC emacs-lisp
+(setq read-process-output-max (* 1024 1024))
+#+END_SRC
+
+Some other default limits in EMACS are also unnecessary low:
+
+#+BEGIN_SRC emacs-lisp
+(setq undo-limit (* 80 1000 1000)
+      recentf-max-saved-items 1000)
+#+END_SRC
+
+** /Built-in features/ that should be enabled by default
+A lot of really useful EMACS behaviours are disabled by default.
+
+#+BEGIN_SRC emacs-lisp
+;; when you visit a file, point goes to the last place where it was
+;; when you previously visited the same file
+(save-place-mode 1)
+
+;; saves minibuffer history (use M-p/n in minibuffer)
+(savehist-mode 1)
+
+;; visualization of matching parens
+(show-paren-mode 1)
+
+;; typing an open parenthesis automatically inserts the corresponding
+;; closing parenthesis
+(electric-pair-mode 1)
+
+;; allows to 'undo' window configuration changes
+(winner-mode 1)
+
+;; word-based commands stop inside symbols with mixed uppercase and
+;; lowercase letters, e.g. "GtkWidget", "EmacsFrameClass",
+;; "NSGraphicsContext".
+(global-subword-mode 1)
+
+;; keeping track of opened files
+(require 'recentf)
+#+END_SRC
+
+** Better organization of /auxiliary files/
+[[https://github.com/emacscollective/no-littering][no-littering]] is an awesome package that organizes many "technical"
+files into ~.emacs.d/etc~ and ~.emacs.d/var~ folders. The package
+should be loaded as early as possible.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'no-littering)
+(require 'no-littering)
+
+;; I'm ok with security risks here but before you do this, make sure
+;; you understand the risks and read the documentation of
+;; no-littering-theme-backups for details
+(no-littering-theme-backups) 
+#+END_SRC
+
+I prefer to store local customizations file under ~etc~ folder.
+
+#+BEGIN_SRC emacs-lisp
+(setq custom-file (no-littering-expand-etc-file-name "custom.el"))
+#+END_SRC
+
+I do not need lockfiles: I never open the same file in multiple EMACS
+instances.
+
+#+BEGIN_SRC emacs-lisp
+(setq create-lockfiles nil)
+#+END_SRC
+
+It's a good idea to exclude ~etc~ and ~var~ folders from ~recentf~
+results.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'recentf-exclude no-littering-etc-directory)
+(add-to-list 'recentf-exclude no-littering-var-directory)
+#+END_SRC
+
+Native compilation cache location can be adjusted in ~early-init.el~.
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+(when (fboundp 'startup-redirect-eln-cache)
+  (startup-redirect-eln-cache
+   (convert-standard-filename
+    (expand-file-name  "var/eln-cache/" user-emacs-directory))))
+#+END_SRC
+
+** It should /look/ modern and comfortable
+This subsection should be placed as early as possible to avoid
+blinking on startup.
+
+Disable UI elements nobody interested in:
+
+#+BEGIN_SRC emacs-lisp
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(horizontal-scroll-bar-mode -1)
+
+;; disabling menu-bar-mode on MacOS leads to incorrect
+;; window maximization behaviour
+(unless (eq system-type 'darwin)
+  (menu-bar-mode -1))
+#+END_SRC
+
+[[https://typeof.net/Iosevka/][Iosevka]] is my favourite font:
+
+#+BEGIN_SRC emacs-lisp
+(let* ((family "Iosevka SS10")
+       (size (if (eq system-type 'darwin)
+                 18 ;; on MacOS HiDPI scaling works out of the box
+               26)) ;; in Gnome HiDPI scaling doesn't work properly
+       (spec (font-spec :family family :size size :weight 'semi-light)))
+  (set-face-attribute 'default nil :font spec)
+  ;; fixed-pitch was set to "Monospace" font by default
+  (set-face-attribute 'fixed-pitch nil :family family)
+  ;; variable-pitch was is set "non-monospace" font by default
+  (set-face-attribute 'variable-pitch nil :family family))
+#+END_SRC
+
+[[https://www.nordtheme.com/][Nord]] is my favourite theme:
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'nord-theme)
+(require 'nord-theme)
+(load-theme 'nord t)
+#+END_SRC
+
+But it has some missing parts and some parts are designed in a way I
+do not like. Let's fix it! Unfortunately I haven't realized how to use
+~custom-theme-set-faces~ here so I merely update global face
+settings. While I do not need secondary theme it's good enbough for
+me.
+
+[[https://www.nordtheme.com/docs/colors-and-palettes][Nord palletes]] are used here for colors when applicable.
+
+Related issues:
+- [[https://github.com/nordtheme/emacs/issues/105][Missing tab bar colors]]
+
+#+BEGIN_SRC emacs-lisp
+(let ((nord0 "#2E3440")
+      (nord1 "#3B4252")
+      (nord3 "#4C566A")
+      (nord9 "#81A1C1")
+      (nord10 "#5E81AC"))
+  (custom-set-faces
+   `(tab-bar ((t (:background ,nord1))))
+   `(tab-bar-tab ((t (:background ,nord0
+                                  :weight bold
+                                  :box (:line-width -1 :style released-button)))))
+   `(tab-bar-tab-inactive ((t (:foreground "gray39"
+                                           :background ,nord1))))
+
+   `(org-block ((t (:inherit org-block :background ,nord1))))
+   `(org-headline-done ((t (:inherit org-headline-done :foreground ,nord10))))
+   ))
+#+END_SRC
+
+Unfortunately, it's pretty common that some interfaces from 3rd-party
+libraries are not styled properly or look ugly. To fix it I need to
+know which exact faces look ugly. ~describe-face~ is a great tool to
+find out what face is used for a particular element, but invoking it
+each time is annoying. So I wrote a minor mode that shows face under
+current cursor position in the minibuffer.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-what-the-face ()
+  "Show face under point in the minibuffer."
+  (interactive)
+  (let ((face (get-char-property (point) 'face)))
+    (if face
+        (message "Face: %s" face)
+      (message "No face at point"))))
+
+(defvar my-what-the-face-last-point nil
+  "Last point where face was described.")
+
+(defun my-what-the-face-adviced ()
+  "Show face under point in the minibuffer. (Only once after point change)"
+  (unless (equal my-what-the-face-last-point (point))
+    (setq my-what-the-face-last-point (point))
+    (my-what-the-face)))
+
+(define-minor-mode my-what-the-face-mode
+  "Minor mode to show face under point when cursor is moved."
+  :global t
+  :lighter " WTFace"
+  (if my-what-the-face-mode
+      (add-hook 'post-command-hook #'my-what-the-face-adviced 0 t)
+        (remove-hook 'post-command-hook #'my-what-the-face-adviced t)))
+#+END_SRC
+
+/Visible bell/ is super-distracting and scary (especilly in the
+night).
+
+#+BEGIN_SRC emacs-lisp
+(setq visible-bell nil)
+#+END_SRC
+
+** Improve keybinding management with focus on /VIM/ editing style
+There is a joke that "EMACS is a great operating system, but lacks a
+good text editor". I know a fix for that: [[https://github.com/emacs-evil/evil][evil]]. It is a VIM emulation
+layer for EMACS. Many folks including me think that it's the best
+implementation of VIM that is not VIM.
+
+First step is to install ~evil~ dependencies.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'undo-tree)
+(require 'undo-tree)
+
+(global-undo-tree-mode)
+
+(straight-use-package 'goto-chg)
+(require 'goto-chg)
+#+END_SRC
+
+[[https://elpa.gnu.org/packages/undo-tree.html][undo-tree]] is a great package that provides a more advanced undo and
+redo system. It's a must-have for ~evil~. But it has an annoying
+behaviour: on each undo history save it shows a message in minibuffer.
+Sometimes it shadows important messages. I found solution [[https://emacs.stackexchange.com/questions/59942/is-it-possible-suppress-save-message-for-undo-tree][here]].
+
+#+BEGIN_SRC emacs-lisp
+(defun my-undo-tree-save-history (undo-tree-save-history &rest args)
+  (let ((message-log-max nil)
+        (inhibit-message t))
+    (apply undo-tree-save-history args)))
+
+(advice-add 'undo-tree-save-history :around 'my-undo-tree-save-history)
+#+END_SRC
+
+Now everything is ready for ~evil~.
+
+#+BEGIN_SRC emacs-lisp
+;; it's required by evil-collection
+(setq evil-want-keybinding nil)
+
+(straight-use-package 'evil)
+(require 'evil)
+
+;; smaller undo steps
+(setq evil-want-fine-undo t)
+
+(setq evil-undo-system 'undo-tree)
+
+(evil-mode 1)
+#+END_SRC
+
+Many EMACS packages do not provide VIM keybindings out of the box. But
+[[https://github.com/emacs-evil/evil-collection][evil-collection]] does it for many of them. I prefer not to enable all
+of the collections, but only those that I really use. (And closer to
+the corresponding configuration sections)
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'evil-collection)
+(require 'evil-collection)
+
+(evil-collection-image-setup)
+(evil-collection-xref-setup)
+(evil-collection-bookmark-setup)
+(evil-collection-compile-setup)
+#+END_SRC
+
+EMAСS has a lot of keybindings. And I'm adding even more! So it's a
+good idea to improve keybinding discoverability. And [[https://github.com/justbur/emacs-which-key][which-key]] is the
+best tool for that!
+
+#+BEGIN_SRC emacs-lisp
+(setq which-key-idle-delay 0.4
+      which-key-max-description-length 120)
+
+(straight-use-package 'which-key)
+(require 'which-key)
+
+(which-key-mode)
+#+END_SRC
+
+Vanilla EMACS keybindings definition system is not very convenient and
+sometimes hard to understand. ~evil~ adds concept of modes on top of
+it and makes it even more complicated. So here I feel need for a
+unified and easy to use keybinding definition solution. [[https://github.com/noctuid/general.el][General]] does
+it perfectly by hiding complex parts behind a simple API.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'general)
+(require 'general)
+#+END_SRC
+
+My first EMACS "distribution" was [[https://spacemacs.org/][Spacemacs]] and I really liked its
+keybinding system. ~general~ allows to create similar keybinding
+definitions. And even more - define helpers tailored to my needs!
+
+#+BEGIN_SRC emacs-lisp
+(general-create-definer my-leader-def :states
+  '(normal insert emacs)
+  :prefix "SPC" :non-normal-prefix "C-s-SPC")
+#+END_SRC
+
+** Adjust keybindings to /MacOS/
+Even [[https://bitbucket.org/mituharu/emacs-mac/src/master/][Mitsuharu Yamamoto's EMACS]] build for MacOS is not tailored for
+keybindings that are common in MacOS GUI apps. Fortunately, it's easy
+to fix.
+
+#+BEGIN_SRC emacs-lisp
+(when (eq system-type 'darwin)
+  (setq locate-command "mdfind")
+  (setq mac-command-modifier 'super
+        mac-option-modifier 'meta)
+
+  (general-define-key
+   "s-c" 'kill-ring-save
+   "s-v" 'yank
+   "s-x" 'kill-region
+
+   "s-s" 'save-buffer
+   "s-o" 'find-file
+
+   "s-a" 'mark-whole-buffer
+   "s-z" 'undo
+   "s-f" 'consult-line
+
+   "s-<left>" 'beginning-of-line
+   "s-<right>" 'end-of-line
+   "s-<up>" 'beginning-of-buffer
+   "s-<down>" 'end-of-buffer
+   "M-<up>" 'backward-paragraph
+   "M-<down>" 'forward-paragraph
+
+   "s-/" 'comment-line
+   ))
+#+END_SRC
+
+** Improve integration with /clipboard/
+Let's enable saving existing clipboard text into kill ring before
+replacing it.
+
+#+BEGIN_SRC emacs-lisp
+(setq save-interprogram-paste-before-kill t)
+#+END_SRC
+
+** Load shell /environment/ variables
+EMAСS GUI for MacOS does not load shell environment variables. It's a
+common issue for MacOS users. [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]] solves the
+problem.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'exec-path-from-shell)
+(require 'exec-path-from-shell)
+
+(add-to-list 'exec-path-from-shell-variables "LANG")
+(add-to-list 'exec-path-from-shell-variables "LC_ALL")
+(add-to-list 'exec-path-from-shell-variables "LC_CTYPE")
+
+(exec-path-from-shell-initialize)
+#+END_SRC
+
+** Improve /minibuffer completion/ experience
+EMACS's default [[https://www.emacswiki.org/emacs/MinibufferCompletion][minibuffer completion]] solutions do their job, but
+there are better ones. Personally, I prefer solution based on packages
+like ~vertico~: in contrast to some completion frameworks like ~helm~,
+~vertico~ (and others) enchance default completion system instead of
+replacing it. Resulting in better integration with other EMACS
+features.
+
+Let's start with [[https://github.com/minad/vertico][vertico]]. It's a minimalistic vertical completion UI
+similar to ~ivy~ or ~helm~. By reusing the built-in facilities system,
+Vertico achieves full compatibility with built-in Emacs completion
+commands and completion tables.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'vertico)
+(setq vertico-cycle t)
+(vertico-mode)
+#+END_SRC
+
+Often I want to focus on commands with particular prefix. For example ~my-~ or ~copilot-~.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-vertico-replace-with-common-prefix ()
+  "Replaces current vertico input with common prefix query.
+
+Replaces vertico input with '^str' where str is the common prefix
+for candidates that starts with the first component of current
+vertico input."
+  (interactive)
+  (when-let* ((current-input (or (car vertico--input) (minibuffer-contents-no-properties)))
+              (prefix-from-input (->> current-input
+                                      (s-split " ")
+                                      (-first-item)
+                                      (s-replace "^" "")))
+              (common-prefix (-some->> vertico--candidates
+                               (--select (s-prefix? prefix-from-input it))
+                               (--reduce (fill-common-string-prefix it acc))))
+              (next-search-query (s-concat "^" common-prefix)))
+    (delete-minibuffer-contents)
+    (insert next-search-query)))
+
+(general-def :keymaps 'vertico-map
+  (kbd "C-<tab>") #'my-vertico-replace-with-common-prefix)
+#+END_SRC
+
+[[https://github.com/oantolin/orderless]["Emacs completion style that matches multiple regexps in any
+order"]]. Sounds good!
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'orderless)
+(require 'orderless)
+#+END_SRC
+
+I want to use orderless exclusively. But for better compatibility with
+other packages I need to set completion-styles in the following way
+(see ~orderless~ [[https://github.com/oantolin/orderless][README]]).
+
+#+BEGIN_SRC emacs-lisp
+(setq completion-styles '(orderless basic))
+(setq completion-category-defaults nil)
+(setq completion-category-overrides '((file (styles basic partial-completion))))
+#+END_SRC
+
+[[https://github.com/minad/consult][consult]] is a great package that provides a lot of useful commands
+based on ~completing-read~. 
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'consult)
+(require 'consult)
+#+END_SRC
+
+I found that some packages use ~multi-occur~ function. So I need
+override it with ~consult-multi-occur~ to have better UI for related
+commands.
+
+#+BEGIN_SRC emacs-lisp
+(advice-add #'multi-occur :override #'consult-multi-occur)
+#+END_SRC
+
+~consult~ commands like ~consult-buffer~ shows "previews" of buffers
+(by temporary switching to them). It can potentially lead to some
+performance issues. To mitigate them I created this helpers. But it's
+better to use ~consult-preview-allowed-hooks~ for that if possible.
+At the moment of writing I do not use this helpers, but prefer to keep
+them here for a while.
+
+#+BEGIN_SRC emacs-lisp
+(defun consult-preview-p ()
+  "Return true when minibuffer in a 'consult preview' state'"
+  (when-let
+      (win (active-minibuffer-window))
+    (not (eq nil (buffer-local-value 'consult--preview-function (window-buffer win))))))
+
+(defun my-inhibit-if-consult-preview (oldfun &rest args)
+  "An around advice to disable some functions in the case of consult preview"
+  (unless (consult-preview-p)
+    (apply oldfun args)))
+#+END_SRC
+
+While ~consult~ improves flow of common EMACS commands, [[https://github.com/minad/marginalia][marginilia]]
+improves how items displayed in ~completing-read~ by adding some extra
+information.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'marginalia)
+(require 'marginalia)
+(marginalia-mode)
+#+END_SRC
+
+** Improve /ediff/ experience
+~ediff~ is a great tool for comparing files and directories. But it
+has some weird defaults.
+
+#+BEGIN_SRC emacs-lisp
+(setq
+ ;; no extra frames!
+ ediff-window-setup-function 'ediff-setup-windows-plain 
+ ;; horizontal split instead of vertical
+ ediff-split-window-function 'split-window-horizontally)
+
+(require 'ediff)
+#+END_SRC
+
+** Improve /dired/ experience
+File explorer is a must-have feature for any editor. EMACS has
+~dired~. But it needs to be adjusted to our setup.
+
+Under the hood ~dired~ uses ~ls~ command to list files. But MacOS has
+a different version of ~ls~ that does not support some options that
+are used by default. So I need to use ~gls~ instead of ~ls~ on MacOS.
+
+#+BEGIN_SRC emacs-lisp
+(setq insert-directory-program (if (eq system-type 'darwin) "gls" "ls"))
+#+END_SRC
+
+I want to see hidden files by default. And I want to see directories
+first.
+
+#+BEGIN_SRC emacs-lisp
+(setq dired-listing-switches "-lah -v --group-directories-first")
+#+END_SRC
+
+When using ~dired~ on remote directories (via ~tramp~) we usually want
+to use ~ls~ instead of ~gls~.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-remote-dired-hook ()
+  "Adjusts Dired behaviour in the case of remote dirs"
+  (when (file-remote-p default-directory)
+    (setq-local dired-actual-switches "-lah")
+    (setq-local insert-directory-program "ls")))
+
+(add-hook 'dired-mode-hook #'my-remote-dired-hook)
+(add-hook 'dired-mode-hook #'diff-hl-dired-mode)
+#+END_SRC
+
+And I want adjust it to Vim-style keybindings.
+
+#+BEGIN_SRC emacs-lisp
+(evil-collection-dired-setup)
+
+;; fix of evil-collection
+(general-unbind
+  :states '(normal visual)
+  :keymaps 'dired-mode-map
+  "SPC")
+#+END_SRC
+
+Also I want to see [[https://github.com/jtbm37/all-the-icons-dired][icons]] in ~dired~. Colorful ones!
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'all-the-icons-dired)
+(setq all-the-icons-dired-monochrome nil)
+(require 'all-the-icons-dired)
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+#+END_SRC
+
+** Improve /ibuffer/ experience
+IBuffer is an integrated buffer manager for EMACS. Sometimes I use it
+so I need to "vimify" it and make a bit more prettier.
+
+#+BEGIN_SRC emacs-lisp
+(evil-collection-ibuffer-setup)
+
+(straight-use-package 'all-the-icons-ibuffer)
+(require 'all-the-icons-ibuffer)
+(add-hook 'ibuffer-mode-hook #'all-the-icons-ibuffer-mode)
+#+END_SRC
+
+** Improve /internal help/ system
+[[https://github.com/Wilfred/helpful][helpful]] is a great package that improves EMACS built-in help system.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'helpful)
+(require 'helpful)
+
+(evil-collection-helpful-setup)
+
+(general-def
+  "C-h f" #'helpful-callable
+  "C-h v" #'helpful-variable
+  "C-h k" #'helpful-key
+  "C-h x" #'helpful-command
+  "C-h F" #'helpful-function)
+#+END_SRC
+
+I prefer to use ~helpful-at-point~ instead of ~evil-lookup~ when
+pressing ~K~ in normal or visual modes.
+
+#+BEGIN_SRC emacs-lisp
+;; evil uses `K` for `evil-lookup` so I need to unbind it first
+(general-unbind evil-motion-state-map "K")
+
+(general-def
+  :states '(normal visual)
+  :keymaps 'emacs-lisp-mode-map
+  "K" #'helpful-at-point)
+#+END_SRC
+
+** Fix confusing /buffer naming/ when working with files with the same name
+EMACS's traditional method for making buffer names unique adds <2>,
+<3>, etc. to the end of (all but one) buffers. ~uniquify~ introduces
+more informative naming conventions.
+
+#+BEGIN_SRC emacs-lisp
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+(require 'uniquify)
+#+END_SRC
+
+** Improve /buffer killing/ flow
+I found that ~kill-this-buffer~ is not very convenient for me. So I
+implemented my own commands that fits my needs better.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-kill-this-buffer ()
+  "Kill current buffer if it isn't used in other windows or tabs. Otherwise switch to previous buffer, with a message."
+  (interactive)
+  (let ((buffer (current-buffer)))
+    (if (or
+         (delq (selected-window) (get-buffer-window-list buffer nil t))
+         (tab-bar-get-buffer-tab (current-buffer) nil t))
+        (progn
+          (switch-to-prev-buffer)
+          (message "Buffer is used in other window or tab. Switched to previous buffer."))
+      (kill-buffer buffer))))
+
+(defun my-force-kill-this-buffer ()
+  "Kill current buffer unconditionally."
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+(defun my-kill-other-buffers ()
+  "Kill all other buffers."
+  (interactive)
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+#+END_SRC
+
+** Fast jumps between /distant places/ in buffer
+VIM keybindings and ~consult-line~ already allows to jump really fast
+between lines. But to bring "to the moon" experience here I need to
+add [[https://github.com/abo-abo/avy][avy]].
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'avy)
+(require 'avy)
+
+(general-def "C-;" #'avy-goto-char)
+#+END_SRC
+
+** Improve /window splitting/ behaviour
+I didn't like default window splitting behaviour. So I decided to
+write my own window splitting function that relies on current window
+aspect ratio.
+
+#+BEGIN_SRC emacs-lisp
+(defvar my-split-window-aspect-ratio-threshold 2.0
+  "If window aspect ratio lower than this
+`my-split-window' will split verically.
+
+Ratio calculated as width divided by height.")
+
+(defun my-split-window (&optional window)
+  "Alternative to `split-window-sensibly' that
+relies on current window aspect ratio.
+
+See `my-split-window-aspect-ratio-threshold'."
+  (let* ((window (or window (selected-window)))
+         (width (float (window-width window)))
+         (height (float (window-height window)))
+         (ratio (/ width height)))
+    (with-selected-window window
+      (if (< ratio my-split-window-aspect-ratio-threshold)
+          (split-window-below)
+        (split-window-right)))))
+
+(setq split-window-preferred-function 'my-split-window)
+#+END_SRC
+
+** Fast jumping between /distant windows/
+When you have a lot of windows open, it can be annoying to jump to a
+distant one (e.g. window in another frame). [[https://github.com/abo-abo/ace-window][ace-window]] is a great
+package that allows to do it quickly.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'ace-window)
+(require 'ace-window)
+
+(general-def :states '(normal visual)
+  "C-w C-w" #'ace-window)
+#+END_SRC
+
+** Be able to keep multiple /window layouts/ open
+Tabs in EMACS are not like tabs in other editors. They are more like a
+way to keep multiple window layouts open. I found them very useful
+when working on multiple projects or when I need to switch between
+different layouts quickly.
+
+#+BEGIN_SRC emacs-lisp
+;; better visual appearance
+(setq tab-bar-show 1)
+(setq tab-bar-close-button-show nil)
+(setq tab-bar-new-button-show nil)
+
+;; MacOS-style keybindings
+(general-def
+  "s-{" #'tab-bar-switch-to-prev-tab
+  "s-}" #'tab-bar-switch-to-next-tab
+  "s-n" #'tab-bar-duplicate-tab
+  "s-t" #'tab-bar-duplicate-tab
+  "s-w" #'tab-bar-close-tab
+  "s-r" #'tab-bar-rename-tab)
+#+END_SRC
+
+** Improve /text scaling/ flow
+~text-scale-increase~ and ~text-scale-decrease~ are really convinient
+commands, but I need more!
+
+#+BEGIN_SRC emacs-lisp
+(defun my-text-scale-0 ()
+  "Text scale reset"
+  (interactive)
+  (text-scale-set 0))
+
+(defun my-text-scale-big ()
+  "Toggles big text scale"
+  (interactive)
+  (if (= text-scale-mode-amount 0)
+      (text-scale-set 2)
+    (my-text-scale-0)))
+#+END_SRC
+
+** Relative /line numbers/ by default, absolute on demand
+When using VIM, relative line numbers are more convinient. But when
+you demo something to someone or pairing via video call, it's better
+to switch to absolute ones.
+
+#+BEGIN_SRC emacs-lisp
+(setq display-line-numbers-type 'relative)
+(global-display-line-numbers-mode 1)
+
+(defun my-switch-line-numbers-mode ()
+  "Changes line numbers mode between relative and absolute"
+  (interactive)
+  (if (eq display-line-numbers-type 'relative)
+      (setq display-line-numbers-type t)
+    (setq display-line-numbers-type 'relative))
+  (display-line-numbers-mode t))
+#+END_SRC
+
+** /Do not show/ non-informative minor modes /in modeline/
+In 99.9% cases I do not need information about these modes in my
+modeline.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'diminish)
+(require 'diminish)
+
+(defun diminish-minor-modes ()
+  "Diminishes non-informative modeline minore-modes' entries."
+  (diminish 'which-key-mode)
+  (diminish 'undo-tree-mode)
+  (diminish 'gcmh-mode)
+  (diminish 'subword-mode)
+  (with-eval-after-load 'org-indent
+    (diminish 'org-indent-mode))
+  (diminish 'auto-revert-mode)
+  (diminish 'org-auto-tangle-mode))
+
+(add-hook 'emacs-startup-hook #'diminish-minor-modes)
+#+END_SRC
+
+** Use spaces for /identation/
+I picked my side in the conflict.
+
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil)
+#+END_SRC
+
+** Automatically add /newline/ at the end of the file
+Like almost all modern editors do.
+
+#+BEGIN_SRC emacs-lisp
+(setq require-final-newline t)
+#+END_SRC
+
+** Handle situation when too many /file watches/ are added
+Might be it's rude, but I decided to remove all watches when my EMACS
+overwhemled by them.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-rm-all-watches ()
+  "Remove all existing file notification watches from EMACS."
+  (interactive)
+  (maphash
+   (lambda (key _value)
+     (file-notify-rm-watch key))
+   file-notify-descriptors))
+#+END_SRC
+
+** Distiguish between different pairs of /delimiters/
+When doing Lisp programming or some complex math expressions it's very
+important to distinguish between different pairs of
+delimiters. [[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] solves the problem.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'rainbow-delimiters)
+(require 'rainbow-delimiters)
+#+END_SRC
+
+** Deal with /pairs/ smarter
+Oh... [[https://github.com/Fuco1/smartparens][smartparens]]... still struggling to use it properly. But I'm not
+ready to give up!
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'smartparens)
+(require 'smartparens-config)
+#+END_SRC
+
+** Make /regular expessions/ in this config more readable
+Regular expessions are powerful, but hard to read. EMACS Lisp regular expressions are even harder to read because of double escaping. But we have ~rx~ macro that makes them much more readable. So when I adopt snippets from other sources I try to rewrite them using ~rx~. In order to do that simpler I use xr to generate ~rx~ expressions from string representations.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'xr)
+(require 'xr)
+#+END_SRC
+
+** Open files in /existing instance/ of EMACS
+Server mode allows to open files in existing EMACS instance from the
+command line.
+
+#+BEGIN_SRC emacs-lisp
+(server-start)
+#+END_SRC
+
+** Define basic leader /keybindings/
+I really like the idea of having a leader key flow for essential
+commands. It makes keybindings more consistent and easier to discover
+when I forget them. Here I set foundation and bind the most essential
+commands.
+
+This subsection comes last. It's more natural to have them in one
+place in the scope of this section because it allows to see all of
+them at once.
+
+#+BEGIN_SRC emacs-lisp
+(my-leader-def
+  "a" '(:ignore t :which-key "app")
+  "a u" #'undo-tree-visualize
+
+  "b" '(:ignore t :which-key "buffer/bookmark")
+  "b b" #'consult-buffer
+  "b k" #'my-kill-this-buffer
+  "b K" #'my-force-kill-this-buffer
+  "b C-k" #'my-kill-other-buffers
+  "b n" #'next-buffer
+  "b p" #'previous-buffer
+  "b i" #'ibuffer
+
+  "b m" #'bookmark-set
+  "b SPC" #'consult-bookmark
+  "b x" #'bookmark-delete
+  "b C-x" #'bookmark-delete-all
+
+  "b d" #'dired-jump
+
+  "c" '(:ignore t :which-key "code")
+
+  "e" '(:ignore t :which-key "edit")
+  "e s" #'smartparens-mode
+  "e [" #'show-smartparens-mode
+  "e p" #'consult-yank-from-kill-ring
+
+  "f" '(:ignore t :which-key "file")
+  "f f" #'find-file
+  "f r" #'consult-recent-file
+
+  "j" '(:ignore t :which-key "jump")
+  "j j" #'consult-imenu
+
+  "m" '(:ignore t :which-key "mode")
+
+  "p" '(:ignore t :which-key "project")
+
+  "s" '(:ignore t :which-key "search")
+
+  "t" '(:ignore t :which-key "toggles")
+  "t +" #'text-scale-increase
+  "t -" #'text-scale-decrease
+  "t =" #'my-text-scale-0
+  "t b" #'my-text-scale-big
+
+  "t l" #'toggle-truncate-lines
+  "t w" #'toggle-word-wrap
+
+  "t n" #'my-switch-line-numbers-mode
+
+
+  "u" '(:ignore t :which-key "utils")
+  "u f" #'my-what-the-face-mode
+  )
+#+END_SRC
+
+* Make it an IDE
+This section is about adding features that make EMACS more like an
+IDE. It's language-agnostic and focused on general features that are
+useful for any programming language.
+
+** /Project/ management and search
+When possible I prefer to use built-in EMACS features. ~project.el~ is
+good enough for me, so I use it. It keymap starts with ~C-x p~ and I
+often use it as is, but I also want to have essential commands under
+my leader keymap.
+
+#+BEGIN_SRC emacs-lisp
+(my-leader-def
+  "SPC" #'project-find-file
+  
+  "p p" #'project-switch-project
+  "p b" #'consult-project-buffer
+  "p k" #'project-kill-buffers)
+#+END_SRC
+
+Sometimes I need to copy current position in the project in order to
+share with someone or for my notes.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-copy-file-path-relative-to-project-root ()
+  "Copy the current buffer's file path and line number relative to the project root into the kill ring."
+  (interactive)
+  (if-let ((file-path (buffer-file-name))
+           (project-root (when (project-current) (expand-file-name (project-root (project-current)))))
+           (line-number (line-number-at-pos))
+           (relative-path (format "%s:%d" (file-relative-name file-path project-root) line-number)))
+      (progn
+        (kill-new relative-path)
+        (message "Copied: %s" relative-path))
+    (message "No file associated with buffer or not in a project.")))
+
+(my-leader-def
+  "p y" #'my-copy-file-path-relative-to-project-root)
+#+END_SRC
+
+Search is a very important part of any IDE. [[https://github.com/BurntSushi/ripgrep][ripgrep]] is my current
+favourite search tool. I prefer to use ~consult-ripgrep~ as a simple
+frontend and [[https://rgel.readthedocs.io/en/latest/][rg]] as a tool for more complex search scenarios.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'rg)
+(require 'rg)
+
+(rg-enable-default-bindings)
+(evil-collection-rg-setup)
+(evil-collection-wgrep-setup)
+
+(my-leader-def
+  "p s" #'consult-ripgrep
+  "p S" #'rg-menu)
+#+END_SRC
+
+** Fast access to /favourite files/
+I have a list of files that I use very often. I want to have fast and
+easy access to them.
+
+#+BEGIN_SRC emacs-lisp
+(defvar my-favourite-files
+  '("~/.emacs.d/README.org"
+    "~/Work/onboarding.org"
+    "~/Desktop/TODO.org"
+    "~/Desktop/highlights.org")
+  "Important files list")
+
+(defun my-open-favourite-file ()
+  "Select and open an important file from my-important-files"
+  (interactive)
+  (find-file (consult--read
+              my-favourite-files
+              :prompt "Favourite files: "
+              :category 'file
+              :sort nil)))
+
+(my-leader-def
+  "f F" #'my-open-favourite-file)
+#+END_SRC
+
+** /Git/ support
+[[https://magit.vc/][magit]] is the best git client. Period. One of the reasons why I cannot
+quit using EMACS.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'magit)
+(require 'magit)
+
+;; word-granularity diff highlighting
+(setq magit-diff-refine-hunk t)
+
+(evil-collection-magit-setup)
+
+(my-leader-def
+  "g" '(:ignore t :which-key "git")
+  "g SPC" #'magit-dispatch
+  "g g" #'magit-status
+  "g b" #'magit-blame)
+#+END_SRC
+
+By default ~magit~ has no syntax highlighting for diffs. It can be
+fixed using [[https://github.com/dandavison/magit-delta][magit-delta]]. Initially I used this article [[https://scripter.co/using-git-delta-with-magit/][Using git-delta
+with Magit]] to set it up.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'magit-delta)
+(require 'magit-delta)
+
+(setq magit-delta-default-dark-theme "Nord")
+
+(add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
+#+END_SRC
+
+[[https://github.com/dgutov/diff-hl/][diff-hl]] is an essential package that highlights changes in the fringe
+of the buffer.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'diff-hl)
+(setq diff-hl-show-staged-changes nil)
+(require 'diff-hl)
+
+(global-diff-hl-mode)
+#+END_SRC
+
+I need support for git-related files. [[https://github.com/magit/git-modes/][git-modes]] provides it.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'git-modes)
+(require 'git-modes)
+#+END_SRC
+
+Sometimes I can use EMACS's built-in ~vc~ package. So I need to
+"vimify" it.
+
+#+BEGIN_SRC emacs-lisp
+(evil-collection-vc-git-setup)
+#+END_SRC
+
+** /Terminal/ support
+Usually I use a separate terminal emulator, but sometimes I need to
+use terminal started from EMACS. In a such case I prefer to use [[https://github.com/akermu/emacs-libvterm][vterm]].
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'vterm)
+(require 'vterm)
+
+(evil-collection-vterm-setup)
+
+(my-leader-def
+  "a t" #'vterm)
+#+END_SRC
+
+** Enable /autocompletion/
+Autocompletion is a must-have feature for any IDE. I prefer to use
+[[https://github.com/minad/corfu][corfu]] and [[https://github.com/minad/cape][cape]] because they have better integration with EMACS
+built-in completion system.
+
+First step is to enable ~corfu~.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'corfu)
+(setq corfu-auto t
+      corfu-preview-current nil
+      corfu-auto-delay 1.0)
+(require 'corfu)
+
+(global-corfu-mode)
+(evil-collection-corfu-setup)
+
+;; while in autocompletion press <tab> to mimic orderless behaviour
+;; (orderless search by multiple regexps in any order)
+(general-def :keymaps 'corfu-map
+  (kbd "<tab>") #'corfu-insert-separator)
+#+END_SRC
+
+~corfu~ has several extensions. I need fancy popup with documentation!
+
+#+BEGIN_SRC emacs-lisp
+(require 'corfu-popupinfo)
+(setq corfu-popupinfo-delay (cons 0.5 0.1))
+(corfu-popupinfo-mode)
+
+(my-leader-def
+  "t p" #'corfu-popupinfo-mode)
+#+END_SRC
+
+UI can be improved by adding icons to the completion popup.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'kind-icon)
+(require 'kind-icon)
+
+(add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)
+#+END_SRC
+
+And now it's time to enable ~cape~ and bind my auto-completion flow to
+C-<tab>-based keybindings.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'cape)
+(require 'cape)
+
+(add-to-list 'completion-at-point-functions #'cape-dabbrev)
+(add-to-list 'completion-at-point-functions #'cape-file)
+
+(general-def :keymaps 'evil-insert-state-map
+  "C-<tab> C-<tab>" #'completion-at-point
+  "C-<tab> f" #'cape-file
+  "C-<tab> d" #'cape-dabbrev
+  "C-<tab> w" #'cape-dict
+  "C-<tab> l" #'cape-line)
+#+END_SRC
+
+** Enable /snippets/
+Snippets are very useful when you need to write a lot of
+boilerplate. But someone's snippets are useless for me - I need to
+write my own in order to remember them better. I haven't found
+yasnippet's format and approach inconvenient and found [[https://github.com/minad/tempel][tempel]].
+
+I like Lisp-data format for snippets and being able to add multiple
+templates in one file for multiple modes. So I can define snippets in
+a tangled code block in this document, especially in language-specific
+subsections. It's much better for me than yasnippet's approach with
+separate files for each snippet.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'tempel)
+(setq tempel-path '("~/.emacs.d/templates.eld" "~/.emacs.d/templates_private.eld"))
+(require 'tempel)
+
+(defun my-tempel-setup-capf ()
+  "Add the Tempel Capf to the beginning of `completion-at-point-functions'."
+  (setq-local completion-at-point-functions
+              (cons #'tempel-complete
+                    (remove 'tempel-complete completion-at-point-functions))))
+
+(add-hook 'conf-mode-hook 'my-tempel-setup-capf)
+(add-hook 'prog-mode-hook 'my-tempel-setup-capf)
+(add-hook 'text-mode-hook 'my-tempel-setup-capf)
+(add-hook 'eglot-managed-mode-hook 'my-tempel-setup-capf)
+
+(my-leader-def
+  "e s" #'tempel-insert)
+#+END_SRC
+
+Global snippets (~templates.eld~):
+
+#+BEGIN_SRC lisp-data :tangle templates.eld
+fundamental-mode ;; Available everywhere
+
+(today (format-time-string "%Y-%m-%d"))
+
+prog-mode
+
+(fixme (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "FIXME ")
+(todo (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "TODO ")
+(bug (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "BUG ")
+(hack (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "HACK ")
+#+END_SRC
+
+** Enable /Language Server/ support
+Language Servers support is a must-have feature for any modern IDE. I
+prefer to use [[https://joaotavora.github.io/eglot/][eglot]] because it has better integration with EMACS
+built-in completion system and other features.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'eglot)
+(require 'eglot)
+#+END_SRC
+
+LSP-powered project-wide symbol search can be very useful:
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'consult-eglot)
+(require 'consult-eglot)
+
+(my-leader-def
+  "j SPC" #'consult-eglot-symbols)
+#+END_SRC
+
+** Retrieve secrets from /passwod manager/
+For CLI apps and EMACS I prefer to use [[https://www.passwordstore.org/][pass]] as a password manager
+instead of 1Password or alternatives. I need to have a convinient way
+to retrieve secrets from it.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-get-pass (name)
+  "Retrieve secret under NAME from Pass."
+  (let ((pass-command (concat "pass " name)))
+    (string-trim (shell-command-to-string pass-command))))
+#+END_SRC
+
+** Opt-in switch to /GitHub Copilot/ completion
+Copilot is a code completion engine that uses OpenAI's GPT. In some
+cases it significantly improves my productivity. I prefer to not mix
+it with other completion engines and use it as a separate one by
+switching to it when needed.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package '(copilot :host github :repo "copilot-emacs/copilot.el" :files ("*.el")))
+
+;; copilot.el requires nodejs to be installed, but I don't want to
+;; install it globally so I'm using Nix to link non-globally installed
+;; nodejs binaries to ~/.emacs.d/nodejs-bin
+(setq exec-path (append exec-path
+                        (list (s-concat (getenv "HOME") "/.emacs.d/nodejs-bin"))))
+(setq copilot-indent-offset-warning-disable t)
+(require 'copilot)
+
+(defun toggle-copilot ()
+  "Toggles between Copilot and Corfu completion engines."
+  (interactive)
+  (if corfu-mode
+      (progn
+        ;; close auto-completion popup if enabled
+        (corfu-quit)
+        (corfu-mode -1)
+        (copilot-mode 1)
+        (message "Copilot enabled"))
+    (progn
+      (copilot-mode -1)
+      (corfu-mode 1)
+      (message "Copilot disabled"))))
+
+(my-leader-def
+  "t c" #'toggle-copilot)
+
+(general-def
+  "s-j" #'toggle-copilot)
+
+(general-def
+  :states '(insert)
+  :keymaps 'copilot-mode-map
+  "s-<return>" #'copilot-accept-completion
+  "C-s-<return>" #'copilot-accept-completion-by-word
+  "C-s-j" #'copilot-next-completion
+  "C-s-k" #'copilot-previous-completion)
+#+END_SRC
+
+** Get assistance from /LLMs/ 
+It's convenient to have an ability to get assistance from LLMs without
+leaving EMACS. [[https://github.com/karthink/gptel][gptel]] is a package that allows to do it. I have to load
+it after ~markdown-mode~ because I want my GPT sessions in Markdown
+format.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'gptel)
+(setq-default gptel-model "gpt-4o")
+(setq gptel-api-key (my-get-pass "openai/api_key"))
+
+(with-eval-after-load 'markdown-mode
+  (require 'gptel)
+
+  (add-hook 'gptel-mode-hook #'toggle-word-wrap))
+
+(my-leader-def
+  "a g" #'gptel)
+#+END_SRC
+
+** /REST/ client
+Often using CURL is not convinient but Postman is overkill. So I need
+some simple and declarative way to describe HTTP requests and run
+them. [[https://github.com/pashky/restclient.el][restclient]] do the job and I haven't found any better package for
+this.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'restclient)
+(require 'restclient)
+
+(add-to-list 'auto-mode-alist
+             `(,(rx ".restclient" eos) . restclient-mode))
+#+END_SRC
+
+** Support /direnv/ environments
+direnv is a great tool that allows to manage directory-local
+environments and hooks. I need to have a convinient way to load them
+in EMACS. [[https://github.com/purcell/envrc][envrc]] is a package that does the job.
+
+It should be loaded as late as possible because:
+
+> It's probably wise to do this late in your startup sequence: you
+normally want envrc-mode to be initialized in each buffer before other
+minor modes like flycheck-mode which might look for
+executables. Counter-intuitively, this means that envrc-global-mode
+should be enabled after other global minor modes, since each prepends
+itself to various hooks. /(From
+https://github.com/purcell/envrc/tree/master)/
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'envrc)
+(require 'envrc)
+
+(add-hook 'after-init-hook #'envrc-global-mode)
+#+END_SRC
+
+** Open fancy /dashboard/ on startup
+Usually IDEs have a welcome screen that shows recent projects etc. I
+found [[https://github.com/emacs-dashboard/emacs-dashboard][dashboard]] package that does the same for EMACS.
+
+#+BEGIN_SRC emacs-lisp
+;; install optional requirements
+(straight-use-package 'page-break-lines)
+(require 'page-break-lines)
+
+(straight-use-package 'all-the-icons)
+(require 'all-the-icons)
+
+(straight-use-package 'dashboard)
+(setq dashboard-startup-banner "~/.emacs.d/logo.png")
+(require 'dashboard)
+
+(dashboard-setup-startup-hook)
+#+END_SRC
+
+* Make it work with...
+Now it's time to add support for specific languages and tools. I
+prefer to configure them in separate subsections.
+
+** Nix
+I use [[https://nixos.org/][nix]] for development shells and declarative package & dotfiles
+management.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'nix-mode)
+(require 'nix-mode)
+
+(add-to-list 'auto-mode-alist
+             `(,(rx ".nix" eos) . nix-mode))
+
+(add-to-list 'eglot-server-programs
+             '(nix-mode . ("nixd")))
+(add-hook 'nix-mode-hook #'eglot-ensure)
+#+END_SRC
+
+** Elixir
+[[https://elixir-lang.org/][Elixir]] is my favourite programming language. I prefer to use
+tree-sitter-based modes for it.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'heex-ts-mode)
+(require 'heex-ts-mode)
+
+(straight-use-package 'elixir-ts-mode)
+(require 'elixir-ts-mode)
+
+(add-to-list 'eglot-server-programs
+             '(elixir-ts-mode . ("lexical")))
+(add-hook 'elixir-ts-mode-hook
+          #'eglot-ensure)
+#+END_SRC
+
+I need to have a convinient way to run tests from EMACS.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'exunit)
+(require 'exunit)
+
+(add-hook 'elixir-ts-mode-hook #'exunit-mode)
+#+END_SRC
+
+Language-specific leader keybindings:
+
+#+BEGIN_SRC emacs-lisp
+(my-leader-def
+  :keymaps 'elixir-ts-mode-map
+  :major-modes t
+  "m" '(:ignore t :which-key "elixir")
+  "m t" #'exunit-transient)
+#+END_SRC
+
+Snippets for ~templates.eld~:
+
+#+BEGIN_SRC lisp-data :tangle templates.eld
+elixir-ts-mode
+
+(desc "describe \"" (s name) "\" do" n>
+      r> n>
+      "end" >)
+
+(test "test \"" (s name) "\" do" n>
+      r> n>
+      "end" >)
+
+(def "def " (s name) "(" (s args) ") do" n>
+     r> n>
+     "end" >)
+
+(defp "defp " (s name) "(" (s args) ") do" n>
+      r> n>
+      "end" >)
+
+(defm "defmodule " (s name) " do" n>
+      r> n>
+      "end" >)
+
+(defts "defmodule " (s name) " do" n>
+       "use TypedStruct" n>
+       n>
+       "typedstruct " (s opts) "do" n>
+       r> n>
+       "end" n>
+       "end" >)
+
+heex-ts-mode
+
+(div "<div>" r> "</div>")
+(divc "<div class=\"" (s classes) "\">" n>
+      r> n>
+      "</div>" >)
+
+(p "<p>" r> "</p>")
+(strong "<strong>" r> "</strong>")
+(h1 "<h1>" r> "</h1>")
+(h2 "<h2>" r> "</h2>")
+(h3 "<h3>" r> "</h3>")
+(h4 "<h4>" r> "</h4>")
+(h5 "<h5>" r> "</h5>")
+(h6 "<h6>" r> "</h6>")
+#+END_SRC
+
+** EMACS Lisp
+This whole configuration is about EMACS Lisp, so I need to take care
+of convinient development experience. Enabling rainbow delimiters is a
+must have for parentheses-heavy language.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+#+END_SRC
+
+** Ruby
+[[https://www.ruby-lang.org/en/][Ruby]] was my favorite programming language before Elixir. I still use
+it, like it and need to have a good support for it.
+
+Unfortunately ~ruby-mode~ still has better syntax highlighting then
+~ruby-ts-mode~.
+
+#+BEGIN_SRC emacs-lisp
+(require 'ruby-mode)
+(add-hook 'ruby-mode-hook #'eglot-ensure)
+#+END_SRC
+
+Support for RSpec and Minitest are essential.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'rspec-mode)
+(require 'rspec-mode)
+
+(straight-use-package 'minitest)
+(require 'minitest)
+#+END_SRC
+
+Language-specific leader keybindings:
+
+#+BEGIN_SRC emacs-lisp
+(my-leader-def
+  :keymaps 'ruby-mode-map
+  :major-modes t
+  "m" '(:ignore t :which-key "ruby")
+  "m t" #'rspec-mode-keymap
+  "m m" '(:ignore t :which-key "minitest")
+  "m m v" #'minitest-verify
+  "m m s" #'minitest-verify-single
+  "m m t" #'minitest-toggle-test-and-target
+  "m m r" #'minitest-rerun
+  "m m a" #'minitest-verify-all)
+#+END_SRC
+
+** JSON
+JSON files are everywhere! I prefer to use tree-sitter-based mode
+instead of built-in ~js-json-mode~.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'major-mode-remap-alist '(js-json-mode . json-ts-mode))
+#+END_SRC
+
+** YAML
+YAML files are everywhere too! I prefer to use built-in
+tree-sitter-based mode.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist `(,(rx ".ya" (? "m") "l" eos) . yaml-ts-mode))
+#+END_SRC
+
+** ORG
+[[https://orgmode.org/][Org-mode]] is the decent way to write notes, documentation and even this
+config. It's already loaded earlier in this document so here I just
+tailor it to my needs.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-startup-indented t
+      org-src-preserve-indentation t
+      org-html-head-include-scripts nil
+      org-pretty-entities t)
+
+(evil-collection-org-setup)
+
+(add-hook 'org-src-mode-hook #'evil-insert-state)
+(add-hook 'org-mode-hook #'toggle-word-wrap)
+(add-hook 'org-mode-hook #'toggle-truncate-lines)
+#+END_SRC
+
+In this config I use auto-tangling but it's not built-in feature. So I
+need to add it.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'org-auto-tangle)
+(require 'org-auto-tangle)
+
+(add-hook 'org-mode-hook #'org-auto-tangle-mode)
+#+END_SRC
+
+When using [[https://github.com/fniessen/org-html-themes][this]] awesome HTML export setup I want my codeblock to be
+properly highlighted. I need to setup [[https://github.com/hniksic/emacs-htmlize][htmlize]].
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'htmlize)
+(require 'htmlize)
+#+END_SRC
+
+Snippets (~templates.eld~):
+
+#+BEGIN_SRC lisp-data :tangle templates.eld
+org-mode
+
+(src "#+BEGIN_SRC " (s lang) n>
+     r> n>
+     "#+END_SRC")
+
+(elisp "#+BEGIN_SRC emacs-lisp" n>
+       r> n>
+       "#+END_SRC")
+
+(shell "#+BEGIN_SRC shell" n>
+       r> n>
+       "#+END_SRC")
+
+(snip "#+BEGIN_SRC lisp-data :tangle templates.eld" n>
+      r> n>
+      "#+END_SRC")
+#+END_SRC
+
+** Markdown
+Markdown is (the most?) popular format for technical documentation.
+
+I want to have idirect editing of code blocks like in org-mode. So I
+need to install ~edit-indirect~ package as stated in ~markdown-mode~
+README.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'edit-indirect)
+(require 'edit-indirect)
+#+END_SRC
+
+And now we can setup [[https://github.com/jrblevin/markdown-mode][markdown-mode]]:
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'markdown-mode)
+(setq markdown-fontify-code-blocks-natively t)
+(require 'markdown-mode)
+
+(add-to-list 'auto-mode-alist
+             `(,(rx "README.md" eos) . gfm-mode))
+#+END_SRC
+
+Some of my projects have a really big README file so I need
+[[https://github.com/ardumont/markdown-toc/][markdown-toc]] in order to generate a table of contents.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'markdown-toc)
+(setq markdown-toc-indentation-space 2)
+(require 'markdown-toc)
+#+END_SRC
+
+Last but not least - mode-specific keybindings:
+
+#+BEGIN_SRC emacs-lisp
+(my-leader-def
+  :keymaps 'markdown-mode-map
+  :major-modes t
+  "m" '(:ignore t :which-key "markdown")
+  "m t" '(:ignore t :which-key "toggle")
+  "m t t" #'markdown-toggle-markup-hiding
+  "m t s" #'markdown-toggle-fontify-code-blocks-natively
+  "m t i" #'markdown-toggle-inline-images
+  "m t m" #'markdown-toggle-math
+  "m t u" #'markdown-toggle-url-hiding
+  "m t w" #'markdown-toggle-wiki-links
+  "m T" #'markdown-toc-generate-or-refresh-toc
+  "m P" #'plantuml-preview-current-block)
+#+END_SRC
+
+** Docker
+It's hard to avoid [[https://www.docker.com/][Docker]] in modern development. Unfortunately. So I
+need Dockerfile support and prefer to use tree-sitter-based solution.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist
+             (cons (rx (any "/\\")
+                       (or "Containerfile" "Dockerfile")
+                       (opt "."
+                            (zero-or-more
+                             (not (any "/\\"))))
+                       eos)
+                   'dockerfile-ts-mode))
+
+(add-to-list 'auto-mode-alist `(,(rx ".dockerfile" eos) . dockerfile-ts-mode))
+
+(add-hook 'dockerfile-ts-mode-hook #'eglot-ensure)
+#+END_SRC
+
+Also it's convinient to have a way to inspect Docker containers and
+images using some EMACS UI.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'docker)
+(require 'docker)
+
+(evil-collection-docker-setup)
+
+(my-leader-def
+  "a d" #'docker)
+#+END_SRC
+
+** Earthly
+[[https://earthly.dev/][Earthly]] is a modern mix of Make and Docker. I used it in some of my
+projects.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'earthfile-mode)
+(require 'earthfile-mode)
+#+END_SRC
+
+** Terrafrom
+[[https://www.terraform.io/][Terraform]] is my favourite "infrastructure as code" tool.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'terraform-mode)
+(require 'terraform-mode)
+
+(add-to-list 'eglot-server-programs
+             '(terraform-mode . ("terraform-ls" "serve")))
+
+(add-hook 'terraform-mode-hook #'eglot-ensure)
+#+END_SRC
+
+TODO: [[https://github.com/MichaHoffmann/tree-sitter-hcl][use tree-sitter-based mode]]
+
+** Go
+I can write [[https://go.dev/][Go]] code. And sometimes I need to do it. Built-in
+tree-sitter-based modes are my choice.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist
+             `(,(rx ".go" eos) . go-ts-mode))
+(add-to-list 'auto-mode-alist
+             `(,(rx (any "/\\") "go.mod" eos) . go-mod-ts-mode))
+
+(add-hook 'go-ts-mode-hook #'eglot-ensure)
+#+END_SRC
+
+I prefer to be able to run tests from EMACS.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'gotest)
+(require 'gotest)
+#+END_SRC
+
+Language-specific leader keybindings:
+
+#+BEGIN_SRC emacs-lisp
+(my-leader-def
+  :keymaps 'go-ts-mode-map
+  :major-modes t
+  "m" '(:ignore t :which-key "go")
+  "m t" '(:ignore t :which-key "gotest")
+  "m t v" #'go-test-current-file
+  "m t s" #'go-test-current-test
+  "m t a" #'go-test-current-project)
+#+END_SRC
+
+** Python
+I can write Python. And sometimes I need to do it. Built-in
+tree-sitter-based mode is my choice.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+
+(add-hook 'python-ts-mode-hook #'eglot-ensure)
+#+END_SRC
+
+** Mastodon
+I want to try to use [[https://mastodon.social/explore][Mastodon]] because I don't like Twitter or Facebook
+or Instagram etc. I believe that it's better to invest time in social
+platforms that are not about ads and tracking.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'mastodon)
+(setq mastodon-instance-url "https://genserver.social"
+      mastodon-active-user "ffloyd")
+(require 'mastodon)
+#+END_SRC
+
+Default timeline is not fancy enough for me.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package '(mastodon-alt :type git :host github :repo "rougier/mastodon-alt"))
+(require 'mastodon-alt)
+
+(mastodon-alt-tl-activate)
+#+END_SRC
+
+** JS/TS(X)
+Sadly, the most popular programming language is
+JavaScript. Fortunately, we have TypeScript that makes it
+better. Writing JS/TS(X) code is unavoidable for me and I need to have
+a support for it.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist `(,(rx ".js" (? "x") eos) . js-ts-mode))
+(add-hook 'js-ts-mode #'eglot-ensure)
+
+(add-to-list 'auto-mode-alist `(,(rx ".ts" eos) . typescript-ts-mode))
+(add-hook 'typescript-ts-mode-hook #'eglot-ensure)
+
+(add-to-list 'auto-mode-alist `(,(rx ".tsx" eos) . tsx-ts-mode))
+(add-hook 'tsx-ts-mode-hook #'eglot-ensure)
+#+END_SRC
+

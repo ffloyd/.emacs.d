@@ -1,0 +1,9 @@
+/straight
+/var
+/eln-cache
+/templates_private.eld
+/etc/custom.el
+
+# files provided by my Nix Home Manager config
+/tree-sitter
+/nodejs-bin
