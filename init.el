@@ -182,7 +182,8 @@
 (let ((nord9 "#81A1C1"))
   (custom-set-faces
    `(mode-line-inactive ((t (:inherit mode-line-inactive
-                                      :foreground ,nord9))))))
+                                      :foreground ,nord9))))
+   `(doom-modeline-buffer-minor-mode ((t (:foreground ,nord9)))))) 
 
 (add-hook 'buffer-list-update-hook #'my-set-modeline-hook)
 
