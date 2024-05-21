@@ -1520,15 +1520,15 @@ I use [[https://nixos.org/][nix]] for development shells and declarative package
 management.
 
 #+BEGIN_SRC emacs-lisp
-(straight-use-package 'nix-mode)
-(require 'nix-mode)
+(straight-use-package 'nix-ts-mode)
+(require 'nix-ts-mode)
 
 (add-to-list 'auto-mode-alist
-             `(,(rx ".nix" eos) . nix-mode))
+             `(,(rx ".nix" eos) . nix-ts-mode))
 
 (add-to-list 'eglot-server-programs
-             '(nix-mode . ("nixd")))
-(add-hook 'nix-mode-hook #'eglot-ensure)
+             '(nix-ts-mode . ("nixd")))
+(add-hook 'nix-ts-mode-hook #'eglot-ensure)
 #+END_SRC
 
 ** Elixir
