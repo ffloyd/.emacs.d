@@ -1363,6 +1363,7 @@ built-in completion system and other features.
 
 #+BEGIN_SRC emacs-lisp
 (straight-use-package 'eglot)
+(setq jsonrpc-default-request-timeout 20) ;; for heavy projects
 (require 'eglot)
 #+END_SRC
 
