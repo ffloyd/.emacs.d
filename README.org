@@ -432,13 +432,13 @@ Now everything is ready for ~evil~.
 (setq evil-want-keybinding nil)
 
 (straight-use-package 'evil)
-(require 'evil)
 
 ;; smaller undo steps
 (setq evil-want-fine-undo t)
 
 (setq evil-undo-system 'undo-tree)
 
+(require 'evil)
 (evil-mode 1)
 #+END_SRC
 
@@ -524,6 +524,26 @@ to fix.
 
    "s-/" 'comment-line
    ))
+#+END_SRC
+
+** Analyze /my behaviour/
+In order to make data-driven decisions about configuration, I need
+tools to analyze my behaviour. keyfreq is a great package that
+provides a simple way to track keybindings usage.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'keyfreq)
+(setq keyfreq-excluded-commands
+      '(mac-mwheel-scroll ;; mouse movement
+        evil-forward-char ;; basic VIM movement
+        evil-backward-char
+        evil-forward-word-end
+        evil-backward-word-begin
+        evil-next-line
+        evil-previous-line))
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
 #+END_SRC
 
 ** Improve integration with /clipboard/
@@ -1069,6 +1089,8 @@ them at once.
 
   "u" '(:ignore t :which-key "utils")
   "u f" #'my-what-the-face-mode
+  "u k" #'keyfreq-show
+  "u C-k" #'keyfreq-reset
   )
 #+END_SRC
 
