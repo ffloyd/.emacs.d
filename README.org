@@ -393,6 +393,58 @@ night).
 (setq visible-bell nil)
 #+END_SRC
 
+Default /modeline/ looks too simple and distracting at the same
+time. I want something lightweight, laconic and fancy. [[https://seagle0128.github.io/doom-modeline/][doom-modeline]]
+is a great choice here.
+
+#+BEGIN_SRC emacs-lisp
+(straight-use-package 'doom-modeline)
+(setq doom-modeline-minor-modes t
+      doom-modeline-buffer-encoding nil
+      doom-modeline-project-detection 'project
+      doom-modeline-modal-icon nil
+      doom-modeline-workspace-name nil)
+(require 'doom-modeline)
+
+(doom-modeline-mode 1)
+#+END_SRC
+
+I want to see position like ~123:13~ instead of ~L123~ in the
+modeline.
+
+#+BEGIN_SRC emacs-lisp
+(column-number-mode 1)
+#+END_SRC
+
+I want modeline for inactive buffers to be very minimalistic.
+
+#+BEGIN_SRC emacs-lisp
+(doom-modeline-def-modeline 'very-minimal
+  '(bar buffer-info-simple)
+  '(major-mode))
+
+(defun my-set-inactive-buffer-modeline ()
+  (doom-modeline-set-modeline 'very-minimal))
+
+(defun my-set-active-buffer-modeline ()
+  (unless (doom-modeline-auto-set-modeline)
+    (doom-modeline-set-main-modeline)))
+
+(defun my-set-modeline-hook ()
+  (dolist (buf (buffer-list))
+          (with-current-buffer buf
+            (if (eq (current-buffer) (window-buffer (selected-window)))
+                (my-set-active-buffer-modeline)
+              (my-set-inactive-buffer-modeline)))))
+
+(let ((nord9 "#81A1C1"))
+  (custom-set-faces
+   `(mode-line-inactive ((t (:inherit mode-line-inactive
+                                      :foreground ,nord9))))))
+
+(add-hook 'buffer-list-update-hook #'my-set-modeline-hook)
+#+END_SRC
+
 ** Improve keybinding management with focus on /VIM/ editing style
 There is a joke that "EMACS is a great operating system, but lacks a
 good text editor". I know a fix for that: [[https://github.com/emacs-evil/evil][evil]]. It is a VIM emulation
