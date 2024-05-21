@@ -149,6 +149,43 @@
 
 (setq visible-bell nil)
 
+(straight-use-package 'doom-modeline)
+(setq doom-modeline-minor-modes t
+      doom-modeline-buffer-encoding nil
+      doom-modeline-project-detection 'project
+      doom-modeline-modal-icon nil
+      doom-modeline-workspace-name nil)
+(require 'doom-modeline)
+
+(doom-modeline-mode 1)
+
+(column-number-mode 1)
+
+(doom-modeline-def-modeline 'very-minimal
+  '(bar buffer-info-simple)
+  '(major-mode))
+
+(defun my-set-inactive-buffer-modeline ()
+  (doom-modeline-set-modeline 'very-minimal))
+
+(defun my-set-active-buffer-modeline ()
+  (unless (doom-modeline-auto-set-modeline)
+    (doom-modeline-set-main-modeline)))
+
+(defun my-set-modeline-hook ()
+  (dolist (buf (buffer-list))
+          (with-current-buffer buf
+            (if (eq (current-buffer) (window-buffer (selected-window)))
+                (my-set-active-buffer-modeline)
+              (my-set-inactive-buffer-modeline)))))
+
+(let ((nord9 "#81A1C1"))
+  (custom-set-faces
+   `(mode-line-inactive ((t (:inherit mode-line-inactive
+                                      :foreground ,nord9))))))
+
+(add-hook 'buffer-list-update-hook #'my-set-modeline-hook)
+
 (straight-use-package 'undo-tree)
 (require 'undo-tree)
 
@@ -168,13 +205,13 @@
 (setq evil-want-keybinding nil)
 
 (straight-use-package 'evil)
-(require 'evil)
 
 ;; smaller undo steps
 (setq evil-want-fine-undo t)
 
 (setq evil-undo-system 'undo-tree)
 
+(require 'evil)
 (evil-mode 1)
 
 (straight-use-package 'evil-collection)
@@ -226,6 +263,19 @@
 
    "s-/" 'comment-line
    ))
+
+(straight-use-package 'keyfreq)
+(setq keyfreq-excluded-commands
+      '(mac-mwheel-scroll ;; mouse movement
+        evil-forward-char ;; basic VIM movement
+        evil-backward-char
+        evil-forward-word-end
+        evil-backward-word-begin
+        evil-next-line
+        evil-previous-line))
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
 
 (setq save-interprogram-paste-before-kill t)
 
@@ -539,6 +589,8 @@ See `my-split-window-aspect-ratio-threshold'."
 
   "u" '(:ignore t :which-key "utils")
   "u f" #'my-what-the-face-mode
+  "u k" #'keyfreq-show
+  "u C-k" #'keyfreq-reset
   )
 
 (my-leader-def
@@ -691,6 +743,7 @@ See `my-split-window-aspect-ratio-threshold'."
   "e s" #'tempel-insert)
 
 (straight-use-package 'eglot)
+(setq jsonrpc-default-request-timeout 20) ;; for heavy projects
 (require 'eglot)
 
 (straight-use-package 'consult-eglot)
@@ -779,15 +832,15 @@ See `my-split-window-aspect-ratio-threshold'."
 
 (dashboard-setup-startup-hook)
 
-(straight-use-package 'nix-mode)
-(require 'nix-mode)
+(straight-use-package 'nix-ts-mode)
+(require 'nix-ts-mode)
 
 (add-to-list 'auto-mode-alist
-             `(,(rx ".nix" eos) . nix-mode))
+             `(,(rx ".nix" eos) . nix-ts-mode))
 
 (add-to-list 'eglot-server-programs
-             '(nix-mode . ("nixd")))
-(add-hook 'nix-mode-hook #'eglot-ensure)
+             '(nix-ts-mode . ("nixd")))
+(add-hook 'nix-ts-mode-hook #'eglot-ensure)
 
 (straight-use-package 'heex-ts-mode)
 (require 'heex-ts-mode)
