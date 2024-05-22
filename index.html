@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-05-22 Wed 01:00 -->
+<!-- 2024-05-22 Wed 16:03 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>My literate EMACS config</title>
@@ -24,79 +24,80 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge29e888">1. Make it a decent configurable editor</a>
+<li><a href="#orgd360949">1. Make it a decent configurable editor</a>
 <ul>
-<li><a href="#org22442e4">1.1. It should be obvious that <i>generated files</i> must not be edited</a></li>
-<li><a href="#org7aa49c6">1.2. Improve <i>native compilation</i> expiriense</a></li>
-<li><a href="#orga1bb9e2">1.3. Improve <i>package</i> management experience</a></li>
-<li><a href="#orgb753058">1.4. Writing <i>elisp</i> functions should be convinient</a></li>
-<li><a href="#org3d5f22a">1.5. Optimize default <i>limits</i> for modern hardware</a></li>
-<li><a href="#org30a0470">1.6. <i>Built-in features</i> that should be enabled by default</a></li>
-<li><a href="#orgf9d3f80">1.7. Better organization of <i>auxiliary files</i></a></li>
-<li><a href="#org6d21af0">1.8. It should <i>look</i> modern and comfortable</a></li>
-<li><a href="#org25f8907">1.9. Improve keybinding management with focus on <i>VIM</i> editing style</a></li>
-<li><a href="#org39114d6">1.10. Adjust keybindings to <i>MacOS</i></a></li>
-<li><a href="#org75364e8">1.11. Analyze <i>my behaviour</i></a></li>
-<li><a href="#orga43301f">1.12. Improve integration with <i>clipboard</i></a></li>
-<li><a href="#org07e2b9b">1.13. Load shell <i>environment</i> variables</a></li>
-<li><a href="#org5e73559">1.14. Improve <i>minibuffer completion</i> experience</a></li>
-<li><a href="#org3dda35f">1.15. Improve <i>ediff</i> experience</a></li>
-<li><a href="#org0f1b215">1.16. Improve <i>dired</i> experience</a></li>
-<li><a href="#orge51d02a">1.17. Improve <i>ibuffer</i> experience</a></li>
-<li><a href="#org9540c68">1.18. Improve <i>internal help</i> system</a></li>
-<li><a href="#orge5a6cb0">1.19. Fix confusing <i>buffer naming</i> when working with files with the same name</a></li>
-<li><a href="#org5ba08dd">1.20. Improve <i>buffer killing</i> flow</a></li>
-<li><a href="#org58908cd">1.21. Fast jumps between <i>distant places</i> in buffer</a></li>
-<li><a href="#org94fe97e">1.22. Improve <i>window splitting</i> behaviour</a></li>
-<li><a href="#org9ed666b">1.23. Fast jumping between <i>distant windows</i></a></li>
-<li><a href="#org828e04f">1.24. Be able to keep multiple <i>window layouts</i> open</a></li>
-<li><a href="#org5d9dee0">1.25. Improve <i>text scaling</i> flow</a></li>
-<li><a href="#org07fb827">1.26. Relative <i>line numbers</i> by default, absolute on demand</a></li>
-<li><a href="#org208909f">1.27. <i>Do not show</i> non-informative minor modes <i>in modeline</i></a></li>
-<li><a href="#org7482403">1.28. Use spaces for <i>identation</i></a></li>
-<li><a href="#orgfc7c9af">1.29. Automatically add <i>newline</i> at the end of the file</a></li>
-<li><a href="#orge36bfdf">1.30. Handle situation when too many <i>file watches</i> are added</a></li>
-<li><a href="#org8da566c">1.31. Distiguish between different pairs of <i>delimiters</i></a></li>
-<li><a href="#org9cbff9c">1.32. Deal with <i>pairs</i> smarter</a></li>
-<li><a href="#orgb9b3129">1.33. Make <i>regular expessions</i> in this config more readable</a></li>
-<li><a href="#org6f38166">1.34. Open files in <i>existing instance</i> of EMACS</a></li>
-<li><a href="#org1c1c174">1.35. Define basic leader <i>keybindings</i></a></li>
+<li><a href="#org5925413">1.1. It should be obvious that <i>generated files</i> must not be edited</a></li>
+<li><a href="#orgc8f8891">1.2. Improve <i>native compilation</i> expiriense</a></li>
+<li><a href="#org2616253">1.3. Improve <i>package</i> management experience</a></li>
+<li><a href="#orgd30b226">1.4. Writing <i>elisp</i> functions should be convinient</a></li>
+<li><a href="#orgceb458f">1.5. Optimize default <i>limits</i> for modern hardware</a></li>
+<li><a href="#org64ac6d5">1.6. <i>Built-in features</i> that should be enabled by default</a></li>
+<li><a href="#orgf1b0622">1.7. Better organization of <i>auxiliary files</i></a></li>
+<li><a href="#orgd17c24b">1.8. It should <i>look</i> modern and comfortable</a></li>
+<li><a href="#org53cb5ae">1.9. Improve keybinding management with focus on <i>VIM</i> editing style</a></li>
+<li><a href="#orgb2ad68e">1.10. Adjust keybindings to <i>MacOS</i></a></li>
+<li><a href="#orgf1ea0fd">1.11. Analyze <i>my behaviour</i></a></li>
+<li><a href="#org1a067e9">1.12. Improve integration with <i>clipboard</i></a></li>
+<li><a href="#orgb2e0933">1.13. Load shell <i>environment</i> variables</a></li>
+<li><a href="#org5ea9398">1.14. Improve <i>minibuffer completion</i> experience</a></li>
+<li><a href="#org26f071b">1.15. Improve <i>ediff</i> experience</a></li>
+<li><a href="#orgd34b465">1.16. Improve <i>dired</i> experience</a></li>
+<li><a href="#orgb12cd77">1.17. Improve <i>ibuffer</i> experience</a></li>
+<li><a href="#org54e77e3">1.18. Improve <i>internal help</i> system</a></li>
+<li><a href="#orgf4d5af5">1.19. Fix confusing <i>buffer naming</i> when working with files with the same name</a></li>
+<li><a href="#orgcd5bc00">1.20. Improve <i>buffer killing</i> flow</a></li>
+<li><a href="#orgdbc6d2b">1.21. Fast jumps between <i>distant places</i> in buffer</a></li>
+<li><a href="#org0cf19cf">1.22. Improve <i>window splitting</i> behaviour</a></li>
+<li><a href="#org773403c">1.23. Fast jumping between <i>distant windows</i></a></li>
+<li><a href="#orgab34a9b">1.24. Be able to keep multiple <i>window layouts</i> open</a></li>
+<li><a href="#org88efd5a">1.25. Improve <i>text scaling</i> flow</a></li>
+<li><a href="#org5d18dd9">1.26. Relative <i>line numbers</i> by default, absolute on demand</a></li>
+<li><a href="#orgab650d5">1.27. <i>Do not show</i> non-informative minor modes <i>in modeline</i></a></li>
+<li><a href="#org70a8592">1.28. Use spaces for <i>identation</i></a></li>
+<li><a href="#org34a042b">1.29. Automatically add <i>newline</i> at the end of the file</a></li>
+<li><a href="#orgc28cbb5">1.30. Handle situation when too many <i>file watches</i> are added</a></li>
+<li><a href="#org6bb3c77">1.31. Distiguish between different pairs of <i>delimiters</i></a></li>
+<li><a href="#org7559692">1.32. Deal with <i>pairs</i> smarter</a></li>
+<li><a href="#org3763c99">1.33. Make <i>regular expessions</i> in this config more readable</a></li>
+<li><a href="#orgff312e0">1.34. Open files in <i>existing instance</i> of EMACS</a></li>
+<li><a href="#org29fb3f2">1.35. Define basic leader <i>keybindings</i></a></li>
 </ul>
 </li>
-<li><a href="#org97218db">2. Make it an IDE</a>
+<li><a href="#orged92d51">2. Make it an IDE</a>
 <ul>
-<li><a href="#orgba2e0af">2.1. <i>Project</i> management and search</a></li>
-<li><a href="#org2ffbc64">2.2. Fast access to <i>favourite files</i></a></li>
-<li><a href="#org469a1dc">2.3. <i>Git</i> support</a></li>
-<li><a href="#org24b84fe">2.4. <i>Terminal</i> support</a></li>
-<li><a href="#orga3f639f">2.5. Enable <i>autocompletion</i></a></li>
-<li><a href="#org12aab72">2.6. Enable <i>snippets</i></a></li>
-<li><a href="#org411d087">2.7. Enable <i>Language Server</i> support</a></li>
-<li><a href="#org3a93fc0">2.8. Retrieve secrets from <i>passwod manager</i></a></li>
-<li><a href="#org9f30562">2.9. Opt-in switch to <i>GitHub Copilot</i> completion</a></li>
-<li><a href="#orgfc64e7b">2.10. Get assistance from <i>LLMs</i></a></li>
-<li><a href="#org8cefda3">2.11. <i>REST</i> client</a></li>
-<li><a href="#org64d305e">2.12. Support <i>direnv</i> environments</a></li>
-<li><a href="#org3fa1476">2.13. Open fancy <i>dashboard</i> on startup</a></li>
+<li><a href="#org2c996c7">2.1. <i>Project</i> management and search</a></li>
+<li><a href="#orgbd5d214">2.2. Saving and loading <i>bookmark</i> lists</a></li>
+<li><a href="#orged8b6ee">2.3. Fast access to <i>favourite files</i></a></li>
+<li><a href="#org58aa2dd">2.4. <i>Git</i> support</a></li>
+<li><a href="#org3bd4dc4">2.5. <i>Terminal</i> support</a></li>
+<li><a href="#org6d2fdaa">2.6. Enable <i>autocompletion</i></a></li>
+<li><a href="#org9c0a724">2.7. Enable <i>snippets</i></a></li>
+<li><a href="#orge28a446">2.8. Enable <i>Language Server</i> support</a></li>
+<li><a href="#org6dc61eb">2.9. Retrieve secrets from <i>passwod manager</i></a></li>
+<li><a href="#org2613864">2.10. Opt-in switch to <i>GitHub Copilot</i> completion</a></li>
+<li><a href="#org4630255">2.11. Get assistance from <i>LLMs</i></a></li>
+<li><a href="#org57f9875">2.12. <i>REST</i> client</a></li>
+<li><a href="#orgfa4ac42">2.13. Support <i>direnv</i> environments</a></li>
+<li><a href="#orgb2e4735">2.14. Open fancy <i>dashboard</i> on startup</a></li>
 </ul>
 </li>
-<li><a href="#orgf721bd7">3. Make it work with&#x2026;</a>
+<li><a href="#org9ec9718">3. Make it work with&#x2026;</a>
 <ul>
-<li><a href="#orgd652324">3.1. Nix</a></li>
-<li><a href="#orgf0a0014">3.2. Elixir</a></li>
-<li><a href="#org50231da">3.3. EMACS Lisp</a></li>
-<li><a href="#orgc487d5f">3.4. Ruby</a></li>
-<li><a href="#org2d17626">3.5. JSON</a></li>
-<li><a href="#org58052be">3.6. YAML</a></li>
-<li><a href="#org5a52960">3.7. ORG</a></li>
-<li><a href="#org8aed73a">3.8. Markdown</a></li>
-<li><a href="#org3bd73f2">3.9. Docker</a></li>
-<li><a href="#org22f777b">3.10. Earthly</a></li>
-<li><a href="#org4a9a93f">3.11. Terrafrom</a></li>
-<li><a href="#org2d61175">3.12. Go</a></li>
-<li><a href="#org31734c4">3.13. Python</a></li>
-<li><a href="#org3c3d679">3.14. Mastodon</a></li>
-<li><a href="#org7b19235">3.15. JS/TS(X)</a></li>
+<li><a href="#org6e55c6f">3.1. Nix</a></li>
+<li><a href="#org2d91bab">3.2. Elixir</a></li>
+<li><a href="#org93e244c">3.3. EMACS Lisp</a></li>
+<li><a href="#org93189df">3.4. Ruby</a></li>
+<li><a href="#org38d2d1c">3.5. JSON</a></li>
+<li><a href="#orgbf0d305">3.6. YAML</a></li>
+<li><a href="#org66d58e7">3.7. ORG</a></li>
+<li><a href="#org9baf50e">3.8. Markdown</a></li>
+<li><a href="#orgde7a6f7">3.9. Docker</a></li>
+<li><a href="#org702b0c4">3.10. Earthly</a></li>
+<li><a href="#org26a20b1">3.11. Terrafrom</a></li>
+<li><a href="#org6d0ee23">3.12. Go</a></li>
+<li><a href="#orgd1fd1f5">3.13. Python</a></li>
+<li><a href="#org98e220d">3.14. Mastodon</a></li>
+<li><a href="#orgafd7317">3.15. JS/TS(X)</a></li>
 </ul>
 </li>
 </ul>
@@ -159,8 +160,8 @@ This config primarily focuses on configuring EMACS for MacOS
 environment, but from time to time I make it more adjusted for my
 NixOS setup.
 </p>
-<div id="outline-container-orge29e888" class="outline-2">
-<h2 id="orge29e888"><span class="section-number-2">1.</span> Make it a decent configurable editor</h2>
+<div id="outline-container-orgd360949" class="outline-2">
+<h2 id="orgd360949"><span class="section-number-2">1.</span> Make it a decent configurable editor</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Vanilla EMACS doesn't act and look like a modern editor out of the
@@ -175,8 +176,8 @@ keybindings. Other keybindings are defined in the corresponding
 subsections.
 </p>
 </div>
-<div id="outline-container-org22442e4" class="outline-3">
-<h3 id="org22442e4"><span class="section-number-3">1.1.</span> It should be obvious that <i>generated files</i> must not be edited</h3>
+<div id="outline-container-org5925413" class="outline-3">
+<h3 id="org5925413"><span class="section-number-3">1.1.</span> It should be obvious that <i>generated files</i> must not be edited</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Disclaimer for <code>early-init.el</code>:
@@ -215,8 +216,8 @@ Disclaimer for <code>templates.eld</code>:
 </div>
 </div>
 </div>
-<div id="outline-container-org7aa49c6" class="outline-3">
-<h3 id="org7aa49c6"><span class="section-number-3">1.2.</span> Improve <i>native compilation</i> expiriense</h3>
+<div id="outline-container-orgc8f8891" class="outline-3">
+<h3 id="orgc8f8891"><span class="section-number-3">1.2.</span> Improve <i>native compilation</i> expiriense</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Native compilation can provide a signifiant speedup and enabled by
@@ -230,8 +231,8 @@ compilation warnings because in the most cases it's just distraction:
 </div>
 </div>
 </div>
-<div id="outline-container-orga1bb9e2" class="outline-3">
-<h3 id="orga1bb9e2"><span class="section-number-3">1.3.</span> Improve <i>package</i> management experience</h3>
+<div id="outline-container-org2616253" class="outline-3">
+<h3 id="org2616253"><span class="section-number-3">1.3.</span> Improve <i>package</i> management experience</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
 This config uses <a href="https://github.com/raxod502/straight.el">straight.el</a> for downloading packages instead of
@@ -305,8 +306,8 @@ preinstalled ORG:
 </div>
 </div>
 </div>
-<div id="outline-container-orgb753058" class="outline-3">
-<h3 id="orgb753058"><span class="section-number-3">1.4.</span> Writing <i>elisp</i> functions should be convinient</h3>
+<div id="outline-container-orgd30b226" class="outline-3">
+<h3 id="orgd30b226"><span class="section-number-3">1.4.</span> Writing <i>elisp</i> functions should be convinient</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 "Missing parts of the language": libraries that are used by majority
@@ -344,8 +345,8 @@ of developers.
 </div>
 </div>
 </div>
-<div id="outline-container-org3d5f22a" class="outline-3">
-<h3 id="org3d5f22a"><span class="section-number-3">1.5.</span> Optimize default <i>limits</i> for modern hardware</h3>
+<div id="outline-container-orgceb458f" class="outline-3">
+<h3 id="orgceb458f"><span class="section-number-3">1.5.</span> Optimize default <i>limits</i> for modern hardware</h3>
 <div class="outline-text-3" id="text-1-5">
 <p>
 Default Garbage Collector behaviour and limits are too aggressive for
@@ -383,8 +384,8 @@ Some other default limits in EMACS are also unnecessary low:
 </div>
 </div>
 </div>
-<div id="outline-container-org30a0470" class="outline-3">
-<h3 id="org30a0470"><span class="section-number-3">1.6.</span> <i>Built-in features</i> that should be enabled by default</h3>
+<div id="outline-container-org64ac6d5" class="outline-3">
+<h3 id="org64ac6d5"><span class="section-number-3">1.6.</span> <i>Built-in features</i> that should be enabled by default</h3>
 <div class="outline-text-3" id="text-1-6">
 <p>
 A lot of really useful EMACS behaviours are disabled by default.
@@ -419,8 +420,8 @@ A lot of really useful EMACS behaviours are disabled by default.
 </div>
 </div>
 </div>
-<div id="outline-container-orgf9d3f80" class="outline-3">
-<h3 id="orgf9d3f80"><span class="section-number-3">1.7.</span> Better organization of <i>auxiliary files</i></h3>
+<div id="outline-container-orgf1b0622" class="outline-3">
+<h3 id="orgf1b0622"><span class="section-number-3">1.7.</span> Better organization of <i>auxiliary files</i></h3>
 <div class="outline-text-3" id="text-1-7">
 <p>
 <a href="https://github.com/emacscollective/no-littering">no-littering</a> is an awesome package that organizes many "technical"
@@ -482,8 +483,8 @@ Native compilation cache location can be adjusted in <code>early-init.el</code>.
 </div>
 </div>
 </div>
-<div id="outline-container-org6d21af0" class="outline-3">
-<h3 id="org6d21af0"><span class="section-number-3">1.8.</span> It should <i>look</i> modern and comfortable</h3>
+<div id="outline-container-orgd17c24b" class="outline-3">
+<h3 id="orgd17c24b"><span class="section-number-3">1.8.</span> It should <i>look</i> modern and comfortable</h3>
 <div class="outline-text-3" id="text-1-8">
 <p>
 This subsection should be placed as early as possible to avoid
@@ -684,8 +685,8 @@ I want modeline for inactive buffers to be very minimalistic.
 </div>
 </div>
 </div>
-<div id="outline-container-org25f8907" class="outline-3">
-<h3 id="org25f8907"><span class="section-number-3">1.9.</span> Improve keybinding management with focus on <i>VIM</i> editing style</h3>
+<div id="outline-container-org53cb5ae" class="outline-3">
+<h3 id="org53cb5ae"><span class="section-number-3">1.9.</span> Improve keybinding management with focus on <i>VIM</i> editing style</h3>
 <div class="outline-text-3" id="text-1-9">
 <p>
 There is a joke that "EMACS is a great operating system, but lacks a
@@ -809,8 +810,8 @@ definitions. And even more - define helpers tailored to my needs!
 </div>
 </div>
 </div>
-<div id="outline-container-org39114d6" class="outline-3">
-<h3 id="org39114d6"><span class="section-number-3">1.10.</span> Adjust keybindings to <i>MacOS</i></h3>
+<div id="outline-container-orgb2ad68e" class="outline-3">
+<h3 id="orgb2ad68e"><span class="section-number-3">1.10.</span> Adjust keybindings to <i>MacOS</i></h3>
 <div class="outline-text-3" id="text-1-10">
 <p>
 Even <a href="https://bitbucket.org/mituharu/emacs-mac/src/master/">Mitsuharu Yamamoto's EMACS</a> build for MacOS is not tailored for
@@ -849,8 +850,8 @@ to fix.
 </div>
 </div>
 </div>
-<div id="outline-container-org75364e8" class="outline-3">
-<h3 id="org75364e8"><span class="section-number-3">1.11.</span> Analyze <i>my behaviour</i></h3>
+<div id="outline-container-orgf1ea0fd" class="outline-3">
+<h3 id="orgf1ea0fd"><span class="section-number-3">1.11.</span> Analyze <i>my behaviour</i></h3>
 <div class="outline-text-3" id="text-1-11">
 <p>
 In order to make data-driven decisions about configuration, I need
@@ -875,8 +876,8 @@ provides a simple way to track keybindings usage.
 </div>
 </div>
 </div>
-<div id="outline-container-orga43301f" class="outline-3">
-<h3 id="orga43301f"><span class="section-number-3">1.12.</span> Improve integration with <i>clipboard</i></h3>
+<div id="outline-container-org1a067e9" class="outline-3">
+<h3 id="org1a067e9"><span class="section-number-3">1.12.</span> Improve integration with <i>clipboard</i></h3>
 <div class="outline-text-3" id="text-1-12">
 <p>
 Let's enable saving existing clipboard text into kill ring before
@@ -889,8 +890,8 @@ replacing it.
 </div>
 </div>
 </div>
-<div id="outline-container-org07e2b9b" class="outline-3">
-<h3 id="org07e2b9b"><span class="section-number-3">1.13.</span> Load shell <i>environment</i> variables</h3>
+<div id="outline-container-orgb2e0933" class="outline-3">
+<h3 id="orgb2e0933"><span class="section-number-3">1.13.</span> Load shell <i>environment</i> variables</h3>
 <div class="outline-text-3" id="text-1-13">
 <p>
 EMAСS GUI for MacOS does not load shell environment variables. It's a
@@ -911,8 +912,8 @@ problem.
 </div>
 </div>
 </div>
-<div id="outline-container-org5e73559" class="outline-3">
-<h3 id="org5e73559"><span class="section-number-3">1.14.</span> Improve <i>minibuffer completion</i> experience</h3>
+<div id="outline-container-org5ea9398" class="outline-3">
+<h3 id="org5ea9398"><span class="section-number-3">1.14.</span> Improve <i>minibuffer completion</i> experience</h3>
 <div class="outline-text-3" id="text-1-14">
 <p>
 EMACS's default <a href="https://www.emacswiki.org/emacs/MinibufferCompletion">minibuffer completion</a> solutions do their job, but
@@ -1049,8 +1050,8 @@ information.
 </div>
 </div>
 </div>
-<div id="outline-container-org3dda35f" class="outline-3">
-<h3 id="org3dda35f"><span class="section-number-3">1.15.</span> Improve <i>ediff</i> experience</h3>
+<div id="outline-container-org26f071b" class="outline-3">
+<h3 id="org26f071b"><span class="section-number-3">1.15.</span> Improve <i>ediff</i> experience</h3>
 <div class="outline-text-3" id="text-1-15">
 <p>
 <code>ediff</code> is a great tool for comparing files and directories. But it
@@ -1069,8 +1070,8 @@ has some weird defaults.
 </div>
 </div>
 </div>
-<div id="outline-container-org0f1b215" class="outline-3">
-<h3 id="org0f1b215"><span class="section-number-3">1.16.</span> Improve <i>dired</i> experience</h3>
+<div id="outline-container-orgd34b465" class="outline-3">
+<h3 id="orgd34b465"><span class="section-number-3">1.16.</span> Improve <i>dired</i> experience</h3>
 <div class="outline-text-3" id="text-1-16">
 <p>
 File explorer is a must-have feature for any editor. EMACS has
@@ -1143,8 +1144,8 @@ Also I want to see <a href="https://github.com/jtbm37/all-the-icons-dired">icons
 </div>
 </div>
 </div>
-<div id="outline-container-orge51d02a" class="outline-3">
-<h3 id="orge51d02a"><span class="section-number-3">1.17.</span> Improve <i>ibuffer</i> experience</h3>
+<div id="outline-container-orgb12cd77" class="outline-3">
+<h3 id="orgb12cd77"><span class="section-number-3">1.17.</span> Improve <i>ibuffer</i> experience</h3>
 <div class="outline-text-3" id="text-1-17">
 <p>
 IBuffer is an integrated buffer manager for EMACS. Sometimes I use it
@@ -1161,8 +1162,8 @@ so I need to "vimify" it and make a bit more prettier.
 </div>
 </div>
 </div>
-<div id="outline-container-org9540c68" class="outline-3">
-<h3 id="org9540c68"><span class="section-number-3">1.18.</span> Improve <i>internal help</i> system</h3>
+<div id="outline-container-org54e77e3" class="outline-3">
+<h3 id="org54e77e3"><span class="section-number-3">1.18.</span> Improve <i>internal help</i> system</h3>
 <div class="outline-text-3" id="text-1-18">
 <p>
 <a href="https://github.com/Wilfred/helpful">helpful</a> is a great package that improves EMACS built-in help system.
@@ -1200,8 +1201,8 @@ pressing <code>K</code> in normal or visual modes.
 </div>
 </div>
 </div>
-<div id="outline-container-orge5a6cb0" class="outline-3">
-<h3 id="orge5a6cb0"><span class="section-number-3">1.19.</span> Fix confusing <i>buffer naming</i> when working with files with the same name</h3>
+<div id="outline-container-orgf4d5af5" class="outline-3">
+<h3 id="orgf4d5af5"><span class="section-number-3">1.19.</span> Fix confusing <i>buffer naming</i> when working with files with the same name</h3>
 <div class="outline-text-3" id="text-1-19">
 <p>
 EMACS's traditional method for making buffer names unique adds &lt;2&gt;,
@@ -1216,8 +1217,8 @@ more informative naming conventions.
 </div>
 </div>
 </div>
-<div id="outline-container-org5ba08dd" class="outline-3">
-<h3 id="org5ba08dd"><span class="section-number-3">1.20.</span> Improve <i>buffer killing</i> flow</h3>
+<div id="outline-container-orgcd5bc00" class="outline-3">
+<h3 id="orgcd5bc00"><span class="section-number-3">1.20.</span> Improve <i>buffer killing</i> flow</h3>
 <div class="outline-text-3" id="text-1-20">
 <p>
 I found that <code>kill-this-buffer</code> is not very convenient for me. So I
@@ -1250,8 +1251,8 @@ implemented my own commands that fits my needs better.
 </div>
 </div>
 </div>
-<div id="outline-container-org58908cd" class="outline-3">
-<h3 id="org58908cd"><span class="section-number-3">1.21.</span> Fast jumps between <i>distant places</i> in buffer</h3>
+<div id="outline-container-orgdbc6d2b" class="outline-3">
+<h3 id="orgdbc6d2b"><span class="section-number-3">1.21.</span> Fast jumps between <i>distant places</i> in buffer</h3>
 <div class="outline-text-3" id="text-1-21">
 <p>
 VIM keybindings and <code>consult-line</code> already allows to jump really fast
@@ -1268,8 +1269,8 @@ add <a href="https://github.com/abo-abo/avy">avy</a>.
 </div>
 </div>
 </div>
-<div id="outline-container-org94fe97e" class="outline-3">
-<h3 id="org94fe97e"><span class="section-number-3">1.22.</span> Improve <i>window splitting</i> behaviour</h3>
+<div id="outline-container-org0cf19cf" class="outline-3">
+<h3 id="org0cf19cf"><span class="section-number-3">1.22.</span> Improve <i>window splitting</i> behaviour</h3>
 <div class="outline-text-3" id="text-1-22">
 <p>
 I didn't like default window splitting behaviour. So I decided to
@@ -1303,8 +1304,8 @@ aspect ratio.
 </div>
 </div>
 </div>
-<div id="outline-container-org9ed666b" class="outline-3">
-<h3 id="org9ed666b"><span class="section-number-3">1.23.</span> Fast jumping between <i>distant windows</i></h3>
+<div id="outline-container-org773403c" class="outline-3">
+<h3 id="org773403c"><span class="section-number-3">1.23.</span> Fast jumping between <i>distant windows</i></h3>
 <div class="outline-text-3" id="text-1-23">
 <p>
 When you have a lot of windows open, it can be annoying to jump to a
@@ -1322,8 +1323,8 @@ package that allows to do it quickly.
 </div>
 </div>
 </div>
-<div id="outline-container-org828e04f" class="outline-3">
-<h3 id="org828e04f"><span class="section-number-3">1.24.</span> Be able to keep multiple <i>window layouts</i> open</h3>
+<div id="outline-container-orgab34a9b" class="outline-3">
+<h3 id="orgab34a9b"><span class="section-number-3">1.24.</span> Be able to keep multiple <i>window layouts</i> open</h3>
 <div class="outline-text-3" id="text-1-24">
 <p>
 Tabs in EMACS are not like tabs in other editors. They are more like a
@@ -1350,8 +1351,8 @@ different layouts quickly.
 </div>
 </div>
 </div>
-<div id="outline-container-org5d9dee0" class="outline-3">
-<h3 id="org5d9dee0"><span class="section-number-3">1.25.</span> Improve <i>text scaling</i> flow</h3>
+<div id="outline-container-org88efd5a" class="outline-3">
+<h3 id="org88efd5a"><span class="section-number-3">1.25.</span> Improve <i>text scaling</i> flow</h3>
 <div class="outline-text-3" id="text-1-25">
 <p>
 <code>text-scale-increase</code> and <code>text-scale-decrease</code> are really convinient
@@ -1374,8 +1375,8 @@ commands, but I need more!
 </div>
 </div>
 </div>
-<div id="outline-container-org07fb827" class="outline-3">
-<h3 id="org07fb827"><span class="section-number-3">1.26.</span> Relative <i>line numbers</i> by default, absolute on demand</h3>
+<div id="outline-container-org5d18dd9" class="outline-3">
+<h3 id="org5d18dd9"><span class="section-number-3">1.26.</span> Relative <i>line numbers</i> by default, absolute on demand</h3>
 <div class="outline-text-3" id="text-1-26">
 <p>
 When using VIM, relative line numbers are more convinient. But when
@@ -1398,8 +1399,8 @@ to switch to absolute ones.
 </div>
 </div>
 </div>
-<div id="outline-container-org208909f" class="outline-3">
-<h3 id="org208909f"><span class="section-number-3">1.27.</span> <i>Do not show</i> non-informative minor modes <i>in modeline</i></h3>
+<div id="outline-container-orgab650d5" class="outline-3">
+<h3 id="orgab650d5"><span class="section-number-3">1.27.</span> <i>Do not show</i> non-informative minor modes <i>in modeline</i></h3>
 <div class="outline-text-3" id="text-1-27">
 <p>
 In 99.9% cases I do not need information about these modes in my
@@ -1426,8 +1427,8 @@ modeline.
 </div>
 </div>
 </div>
-<div id="outline-container-org7482403" class="outline-3">
-<h3 id="org7482403"><span class="section-number-3">1.28.</span> Use spaces for <i>identation</i></h3>
+<div id="outline-container-org70a8592" class="outline-3">
+<h3 id="org70a8592"><span class="section-number-3">1.28.</span> Use spaces for <i>identation</i></h3>
 <div class="outline-text-3" id="text-1-28">
 <p>
 I picked my side in the conflict.
@@ -1439,8 +1440,8 @@ I picked my side in the conflict.
 </div>
 </div>
 </div>
-<div id="outline-container-orgfc7c9af" class="outline-3">
-<h3 id="orgfc7c9af"><span class="section-number-3">1.29.</span> Automatically add <i>newline</i> at the end of the file</h3>
+<div id="outline-container-org34a042b" class="outline-3">
+<h3 id="org34a042b"><span class="section-number-3">1.29.</span> Automatically add <i>newline</i> at the end of the file</h3>
 <div class="outline-text-3" id="text-1-29">
 <p>
 Like almost all modern editors do.
@@ -1452,8 +1453,8 @@ Like almost all modern editors do.
 </div>
 </div>
 </div>
-<div id="outline-container-orge36bfdf" class="outline-3">
-<h3 id="orge36bfdf"><span class="section-number-3">1.30.</span> Handle situation when too many <i>file watches</i> are added</h3>
+<div id="outline-container-orgc28cbb5" class="outline-3">
+<h3 id="orgc28cbb5"><span class="section-number-3">1.30.</span> Handle situation when too many <i>file watches</i> are added</h3>
 <div class="outline-text-3" id="text-1-30">
 <p>
 Might be it's rude, but I decided to remove all watches when my EMACS
@@ -1472,8 +1473,8 @@ overwhemled by them.
 </div>
 </div>
 </div>
-<div id="outline-container-org8da566c" class="outline-3">
-<h3 id="org8da566c"><span class="section-number-3">1.31.</span> Distiguish between different pairs of <i>delimiters</i></h3>
+<div id="outline-container-org6bb3c77" class="outline-3">
+<h3 id="org6bb3c77"><span class="section-number-3">1.31.</span> Distiguish between different pairs of <i>delimiters</i></h3>
 <div class="outline-text-3" id="text-1-31">
 <p>
 When doing Lisp programming or some complex math expressions it's very
@@ -1488,8 +1489,8 @@ delimiters. <a href="https://github.com/Fanael/rainbow-delimiters">rainbow-delim
 </div>
 </div>
 </div>
-<div id="outline-container-org9cbff9c" class="outline-3">
-<h3 id="org9cbff9c"><span class="section-number-3">1.32.</span> Deal with <i>pairs</i> smarter</h3>
+<div id="outline-container-org7559692" class="outline-3">
+<h3 id="org7559692"><span class="section-number-3">1.32.</span> Deal with <i>pairs</i> smarter</h3>
 <div class="outline-text-3" id="text-1-32">
 <p>
 Oh&#x2026; <a href="https://github.com/Fuco1/smartparens">smartparens</a>&#x2026; still struggling to use it properly. But I'm not
@@ -1503,8 +1504,8 @@ ready to give up!
 </div>
 </div>
 </div>
-<div id="outline-container-orgb9b3129" class="outline-3">
-<h3 id="orgb9b3129"><span class="section-number-3">1.33.</span> Make <i>regular expessions</i> in this config more readable</h3>
+<div id="outline-container-org3763c99" class="outline-3">
+<h3 id="org3763c99"><span class="section-number-3">1.33.</span> Make <i>regular expessions</i> in this config more readable</h3>
 <div class="outline-text-3" id="text-1-33">
 <p>
 Regular expessions are powerful, but hard to read. EMACS Lisp regular expressions are even harder to read because of double escaping. But we have <code>rx</code> macro that makes them much more readable. So when I adopt snippets from other sources I try to rewrite them using <code>rx</code>. In order to do that simpler I use xr to generate <code>rx</code> expressions from string representations.
@@ -1517,8 +1518,8 @@ Regular expessions are powerful, but hard to read. EMACS Lisp regular expression
 </div>
 </div>
 </div>
-<div id="outline-container-org6f38166" class="outline-3">
-<h3 id="org6f38166"><span class="section-number-3">1.34.</span> Open files in <i>existing instance</i> of EMACS</h3>
+<div id="outline-container-orgff312e0" class="outline-3">
+<h3 id="orgff312e0"><span class="section-number-3">1.34.</span> Open files in <i>existing instance</i> of EMACS</h3>
 <div class="outline-text-3" id="text-1-34">
 <p>
 Server mode allows to open files in existing EMACS instance from the
@@ -1531,8 +1532,8 @@ command line.
 </div>
 </div>
 </div>
-<div id="outline-container-org1c1c174" class="outline-3">
-<h3 id="org1c1c174"><span class="section-number-3">1.35.</span> Define basic leader <i>keybindings</i></h3>
+<div id="outline-container-org29fb3f2" class="outline-3">
+<h3 id="org29fb3f2"><span class="section-number-3">1.35.</span> Define basic leader <i>keybindings</i></h3>
 <div class="outline-text-3" id="text-1-35">
 <p>
 I really like the idea of having a leader key flow for essential
@@ -1552,7 +1553,7 @@ them at once.
   <span style="color: #A3BE8C;">"a"</span> '<span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">:ignore</span> t <span style="color: #81A1C1;">:which-key</span> <span style="color: #A3BE8C;">"app"</span><span style="color: #88C0D0;">)</span>
   <span style="color: #A3BE8C;">"a u"</span> #'undo-tree-visualize
 
-  <span style="color: #A3BE8C;">"b"</span> '<span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">:ignore</span> t <span style="color: #81A1C1;">:which-key</span> <span style="color: #A3BE8C;">"buffer/bookmark"</span><span style="color: #88C0D0;">)</span>
+  <span style="color: #A3BE8C;">"b"</span> '<span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">:ignore</span> t <span style="color: #81A1C1;">:which-key</span> <span style="color: #A3BE8C;">"buffer"</span><span style="color: #88C0D0;">)</span>
   <span style="color: #A3BE8C;">"b b"</span> #'consult-buffer
   <span style="color: #A3BE8C;">"b k"</span> #'my-kill-this-buffer
   <span style="color: #A3BE8C;">"b K"</span> #'my-force-kill-this-buffer
@@ -1561,10 +1562,11 @@ them at once.
   <span style="color: #A3BE8C;">"b p"</span> #'previous-buffer
   <span style="color: #A3BE8C;">"b i"</span> #'ibuffer
 
-  <span style="color: #A3BE8C;">"b m"</span> #'bookmark-set
-  <span style="color: #A3BE8C;">"b SPC"</span> #'consult-bookmark
+  <span style="color: #A3BE8C;">"B"</span> '<span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">:ignore</span> t <span style="color: #81A1C1;">:which-key</span> <span style="color: #A3BE8C;">"bookmark"</span><span style="color: #88C0D0;">)</span>
+  <span style="color: #A3BE8C;">"B m"</span> #'bookmark-set
+  <span style="color: #A3BE8C;">"B B"</span> #'consult-bookmark
   <span style="color: #A3BE8C;">"b x"</span> #'bookmark-delete
-  <span style="color: #A3BE8C;">"b C-x"</span> #'bookmark-delete-all
+  <span style="color: #A3BE8C;">"B C-x"</span> #'bookmark-delete-all
 
   <span style="color: #A3BE8C;">"b d"</span> #'dired-jump
 
@@ -1610,8 +1612,8 @@ them at once.
 </div>
 </div>
 </div>
-<div id="outline-container-org97218db" class="outline-2">
-<h2 id="org97218db"><span class="section-number-2">2.</span> Make it an IDE</h2>
+<div id="outline-container-orged92d51" class="outline-2">
+<h2 id="orged92d51"><span class="section-number-2">2.</span> Make it an IDE</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 This section is about adding features that make EMACS more like an
@@ -1619,8 +1621,8 @@ IDE. It's language-agnostic and focused on general features that are
 useful for any programming language.
 </p>
 </div>
-<div id="outline-container-orgba2e0af" class="outline-3">
-<h3 id="orgba2e0af"><span class="section-number-3">2.1.</span> <i>Project</i> management and search</h3>
+<div id="outline-container-org2c996c7" class="outline-3">
+<h3 id="org2c996c7"><span class="section-number-3">2.1.</span> <i>Project</i> management and search</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 When possible I prefer to use built-in EMACS features. <code>project.el</code> is
@@ -1683,9 +1685,76 @@ frontend and <a href="https://rgel.readthedocs.io/en/latest/">rg</a> as a tool f
 </div>
 </div>
 </div>
-<div id="outline-container-org2ffbc64" class="outline-3">
-<h3 id="org2ffbc64"><span class="section-number-3">2.2.</span> Fast access to <i>favourite files</i></h3>
+<div id="outline-container-orgbd5d214" class="outline-3">
+<h3 id="orgbd5d214"><span class="section-number-3">2.2.</span> Saving and loading <i>bookmark</i> lists</h3>
 <div class="outline-text-3" id="text-2-2">
+<p>
+I usually use bookmarks to remember places in the code that related to
+my current task. When I work on multiple things during the day I do
+not want to mix bookmarks for different tasks. So I need some bookmark
+lists management solution.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #8FBCBB;">(</span><span style="color: #81A1C1;">defvar</span> <span style="color: #D8DEE9;">my-bookmarks-directory</span>
+  <span style="color: #88C0D0;">(</span>expand-file-name <span style="color: #A3BE8C;">"bookmarks"</span> no-littering-var-directory<span style="color: #88C0D0;">)</span>
+  <span style="color: #616e88;">"Directory where bookmark lists are stored."</span><span style="color: #8FBCBB;">)</span>
+
+<span style="color: #8FBCBB;">(</span><span style="color: #81A1C1;">unless</span> <span style="color: #88C0D0;">(</span>file-directory-p my-bookmarks-directory<span style="color: #88C0D0;">)</span>
+  <span style="color: #88C0D0;">(</span>make-directory my-bookmarks-directory<span style="color: #88C0D0;">)</span><span style="color: #8FBCBB;">)</span>
+
+<span style="color: #8FBCBB;">(</span><span style="color: #81A1C1;">defun</span> <span style="color: #88C0D0;">my-bookmark-list--files</span> <span style="color: #88C0D0;">()</span>
+  <span style="color: #616e88;">"Return a list of bookmark files in `my-bookmarks-directory`."</span>
+  <span style="color: #88C0D0;">(</span>directory-files my-bookmarks-directory t <span style="color: #A3BE8C;">".*\\.el"</span><span style="color: #88C0D0;">)</span><span style="color: #8FBCBB;">)</span>
+
+<span style="color: #8FBCBB;">(</span><span style="color: #81A1C1;">defun</span> <span style="color: #88C0D0;">my-bookmark-list-save</span> <span style="color: #88C0D0;">()</span>
+  <span style="color: #616e88;">"Prompt for a bookmark file and save bookmarks to it."</span>
+  <span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">interactive</span><span style="color: #88C0D0;">)</span>
+  <span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">let*</span> <span style="color: #81A1C1;">(</span><span style="color: #5E81AC;">(</span>selected-file <span style="color: #D08770;">(</span>consult--read
+                         <span style="color: #EBCB8B;">(</span>my-bookmark-list--files<span style="color: #EBCB8B;">)</span>
+                         <span style="color: #81A1C1;">:prompt</span> <span style="color: #A3BE8C;">"Save bookmarks to file: "</span>
+                         <span style="color: #81A1C1;">:require-match</span> nil
+                         <span style="color: #81A1C1;">:category</span> 'file<span style="color: #D08770;">)</span><span style="color: #5E81AC;">)</span>
+         <span style="color: #5E81AC;">(</span>selected-file-with-ext <span style="color: #D08770;">(</span><span style="color: #81A1C1;">if</span> <span style="color: #EBCB8B;">(</span>string-suffix-p <span style="color: #A3BE8C;">".el"</span> selected-file t<span style="color: #EBCB8B;">)</span>
+                                     selected-file
+                                   <span style="color: #EBCB8B;">(</span>concat selected-file <span style="color: #A3BE8C;">".el"</span><span style="color: #EBCB8B;">)</span><span style="color: #D08770;">)</span><span style="color: #5E81AC;">)</span>
+         <span style="color: #5E81AC;">(</span>file <span style="color: #D08770;">(</span>expand-file-name selected-file-with-ext my-bookmarks-directory<span style="color: #D08770;">)</span><span style="color: #5E81AC;">)</span><span style="color: #81A1C1;">)</span>
+    <span style="color: #81A1C1;">(</span>bookmark-write-file file<span style="color: #81A1C1;">)</span><span style="color: #88C0D0;">)</span><span style="color: #8FBCBB;">)</span>
+
+<span style="color: #8FBCBB;">(</span><span style="color: #81A1C1;">defun</span> <span style="color: #88C0D0;">my-bookmark-list-load</span> <span style="color: #88C0D0;">()</span>
+  <span style="color: #616e88;">"Prompt for a bookmark file and load bookmarks from it."</span>
+  <span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">interactive</span><span style="color: #88C0D0;">)</span>
+  <span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">let*</span> <span style="color: #81A1C1;">(</span><span style="color: #5E81AC;">(</span>selected-file <span style="color: #D08770;">(</span>consult--read
+                         <span style="color: #EBCB8B;">(</span>my-bookmark-list--files<span style="color: #EBCB8B;">)</span>
+                         <span style="color: #81A1C1;">:prompt</span> <span style="color: #A3BE8C;">"Load bookmarks from file: "</span>
+                         <span style="color: #81A1C1;">:require-match</span> t
+                         <span style="color: #81A1C1;">:category</span> 'file<span style="color: #D08770;">)</span><span style="color: #5E81AC;">)</span>
+         <span style="color: #5E81AC;">(</span>file <span style="color: #D08770;">(</span>expand-file-name selected-file my-bookmarks-directory<span style="color: #D08770;">)</span><span style="color: #5E81AC;">)</span><span style="color: #81A1C1;">)</span>
+    <span style="color: #81A1C1;">(</span>bookmark-load file<span style="color: #81A1C1;">)</span><span style="color: #88C0D0;">)</span><span style="color: #8FBCBB;">)</span>
+         
+<span style="color: #8FBCBB;">(</span><span style="color: #81A1C1;">defun</span> <span style="color: #88C0D0;">my-bookmark-list-delete</span> <span style="color: #88C0D0;">()</span>
+  <span style="color: #616e88;">"Prompt for a bookmark file and delete it."</span>
+  <span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">interactive</span><span style="color: #88C0D0;">)</span>
+  <span style="color: #88C0D0;">(</span><span style="color: #81A1C1;">let*</span> <span style="color: #81A1C1;">(</span><span style="color: #5E81AC;">(</span>selected-file <span style="color: #D08770;">(</span>consult--read
+                         <span style="color: #EBCB8B;">(</span>my-bookmark-list--files<span style="color: #EBCB8B;">)</span>
+                         <span style="color: #81A1C1;">:prompt</span> <span style="color: #A3BE8C;">"Delete bookmark file: "</span>
+                         <span style="color: #81A1C1;">:require-match</span> t
+                         <span style="color: #81A1C1;">:category</span> 'file<span style="color: #D08770;">)</span><span style="color: #5E81AC;">)</span>
+         <span style="color: #5E81AC;">(</span>file <span style="color: #D08770;">(</span>expand-file-name selected-file my-bookmarks-directory<span style="color: #D08770;">)</span><span style="color: #5E81AC;">)</span><span style="color: #81A1C1;">)</span>
+    <span style="color: #81A1C1;">(</span>delete-file file<span style="color: #81A1C1;">)</span>
+    <span style="color: #81A1C1;">(</span>message <span style="color: #A3BE8C;">"Deleted: %s"</span> file<span style="color: #81A1C1;">)</span><span style="color: #88C0D0;">)</span><span style="color: #8FBCBB;">)</span>
+
+<span style="color: #8FBCBB;">(</span><span style="color: #81A1C1;">my-leader-def</span>
+  <span style="color: #A3BE8C;">"B s"</span> #'my-bookmark-list-save
+  <span style="color: #A3BE8C;">"B l"</span> #'my-bookmark-list-load
+  <span style="color: #A3BE8C;">"B D"</span> #'my-bookmark-list-delete<span style="color: #8FBCBB;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orged8b6ee" class="outline-3">
+<h3 id="orged8b6ee"><span class="section-number-3">2.3.</span> Fast access to <i>favourite files</i></h3>
+<div class="outline-text-3" id="text-2-3">
 <p>
 I have a list of files that I use very often. I want to have fast and
 easy access to them.
@@ -1714,9 +1783,9 @@ easy access to them.
 </div>
 </div>
 </div>
-<div id="outline-container-org469a1dc" class="outline-3">
-<h3 id="org469a1dc"><span class="section-number-3">2.3.</span> <i>Git</i> support</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-org58aa2dd" class="outline-3">
+<h3 id="org58aa2dd"><span class="section-number-3">2.4.</span> <i>Git</i> support</h3>
+<div class="outline-text-3" id="text-2-4">
 <p>
 <a href="https://magit.vc/">magit</a> is the best git client. Period. One of the reasons why I cannot
 quit using EMACS.
@@ -1790,9 +1859,9 @@ Sometimes I can use EMACS's built-in <code>vc</code> package. So I need to
 </div>
 </div>
 </div>
-<div id="outline-container-org24b84fe" class="outline-3">
-<h3 id="org24b84fe"><span class="section-number-3">2.4.</span> <i>Terminal</i> support</h3>
-<div class="outline-text-3" id="text-2-4">
+<div id="outline-container-org3bd4dc4" class="outline-3">
+<h3 id="org3bd4dc4"><span class="section-number-3">2.5.</span> <i>Terminal</i> support</h3>
+<div class="outline-text-3" id="text-2-5">
 <p>
 Usually I use a separate terminal emulator, but sometimes I need to
 use terminal started from EMACS. In a such case I prefer to use <a href="https://github.com/akermu/emacs-libvterm">vterm</a>.
@@ -1810,9 +1879,9 @@ use terminal started from EMACS. In a such case I prefer to use <a href="https:/
 </div>
 </div>
 </div>
-<div id="outline-container-orga3f639f" class="outline-3">
-<h3 id="orga3f639f"><span class="section-number-3">2.5.</span> Enable <i>autocompletion</i></h3>
-<div class="outline-text-3" id="text-2-5">
+<div id="outline-container-org6d2fdaa" class="outline-3">
+<h3 id="org6d2fdaa"><span class="section-number-3">2.6.</span> Enable <i>autocompletion</i></h3>
+<div class="outline-text-3" id="text-2-6">
 <p>
 Autocompletion is a must-have feature for any IDE. I prefer to use
 <a href="https://github.com/minad/corfu">corfu</a> and <a href="https://github.com/minad/cape">cape</a> because they have better integration with EMACS
@@ -1888,9 +1957,9 @@ C-&lt;tab&gt;-based keybindings.
 </div>
 </div>
 </div>
-<div id="outline-container-org12aab72" class="outline-3">
-<h3 id="org12aab72"><span class="section-number-3">2.6.</span> Enable <i>snippets</i></h3>
-<div class="outline-text-3" id="text-2-6">
+<div id="outline-container-org9c0a724" class="outline-3">
+<h3 id="org9c0a724"><span class="section-number-3">2.7.</span> Enable <i>snippets</i></h3>
+<div class="outline-text-3" id="text-2-7">
 <p>
 Snippets are very useful when you need to write a lot of
 boilerplate. But someone's snippets are useless for me - I need to
@@ -1946,9 +2015,9 @@ prog-mode
 </div>
 </div>
 </div>
-<div id="outline-container-org411d087" class="outline-3">
-<h3 id="org411d087"><span class="section-number-3">2.7.</span> Enable <i>Language Server</i> support</h3>
-<div class="outline-text-3" id="text-2-7">
+<div id="outline-container-orge28a446" class="outline-3">
+<h3 id="orge28a446"><span class="section-number-3">2.8.</span> Enable <i>Language Server</i> support</h3>
+<div class="outline-text-3" id="text-2-8">
 <p>
 Language Servers support is a must-have feature for any modern IDE. I
 prefer to use <a href="https://joaotavora.github.io/eglot/">eglot</a> because it has better integration with EMACS
@@ -1976,9 +2045,9 @@ LSP-powered project-wide symbol search can be very useful:
 </div>
 </div>
 </div>
-<div id="outline-container-org3a93fc0" class="outline-3">
-<h3 id="org3a93fc0"><span class="section-number-3">2.8.</span> Retrieve secrets from <i>passwod manager</i></h3>
-<div class="outline-text-3" id="text-2-8">
+<div id="outline-container-org6dc61eb" class="outline-3">
+<h3 id="org6dc61eb"><span class="section-number-3">2.9.</span> Retrieve secrets from <i>passwod manager</i></h3>
+<div class="outline-text-3" id="text-2-9">
 <p>
 For CLI apps and EMACS I prefer to use <a href="https://www.passwordstore.org/">pass</a> as a password manager
 instead of 1Password or alternatives. I need to have a convinient way
@@ -1994,9 +2063,9 @@ to retrieve secrets from it.
 </div>
 </div>
 </div>
-<div id="outline-container-org9f30562" class="outline-3">
-<h3 id="org9f30562"><span class="section-number-3">2.9.</span> Opt-in switch to <i>GitHub Copilot</i> completion</h3>
-<div class="outline-text-3" id="text-2-9">
+<div id="outline-container-org2613864" class="outline-3">
+<h3 id="org2613864"><span class="section-number-3">2.10.</span> Opt-in switch to <i>GitHub Copilot</i> completion</h3>
+<div class="outline-text-3" id="text-2-10">
 <p>
 Copilot is a code completion engine that uses OpenAI's GPT. In some
 cases it significantly improves my productivity. I prefer to not mix
@@ -2047,9 +2116,9 @@ switching to it when needed.
 </div>
 </div>
 </div>
-<div id="outline-container-orgfc64e7b" class="outline-3">
-<h3 id="orgfc64e7b"><span class="section-number-3">2.10.</span> Get assistance from <i>LLMs</i></h3>
-<div class="outline-text-3" id="text-2-10">
+<div id="outline-container-org4630255" class="outline-3">
+<h3 id="org4630255"><span class="section-number-3">2.11.</span> Get assistance from <i>LLMs</i></h3>
+<div class="outline-text-3" id="text-2-11">
 <p>
 It's convenient to have an ability to get assistance from LLMs without
 leaving EMACS. <a href="https://github.com/karthink/gptel">gptel</a> is a package that allows to do it. I have to load
@@ -2073,9 +2142,9 @@ format.
 </div>
 </div>
 </div>
-<div id="outline-container-org8cefda3" class="outline-3">
-<h3 id="org8cefda3"><span class="section-number-3">2.11.</span> <i>REST</i> client</h3>
-<div class="outline-text-3" id="text-2-11">
+<div id="outline-container-org57f9875" class="outline-3">
+<h3 id="org57f9875"><span class="section-number-3">2.12.</span> <i>REST</i> client</h3>
+<div class="outline-text-3" id="text-2-12">
 <p>
 Often using CURL is not convinient but Postman is overkill. So I need
 some simple and declarative way to describe HTTP requests and run
@@ -2093,9 +2162,9 @@ this.
 </div>
 </div>
 </div>
-<div id="outline-container-org64d305e" class="outline-3">
-<h3 id="org64d305e"><span class="section-number-3">2.12.</span> Support <i>direnv</i> environments</h3>
-<div class="outline-text-3" id="text-2-12">
+<div id="outline-container-orgfa4ac42" class="outline-3">
+<h3 id="orgfa4ac42"><span class="section-number-3">2.13.</span> Support <i>direnv</i> environments</h3>
+<div class="outline-text-3" id="text-2-13">
 <p>
 direnv is a great tool that allows to manage directory-local
 environments and hooks. I need to have a convinient way to load them
@@ -2125,9 +2194,9 @@ itself to various hooks. <i>(From
 </div>
 </div>
 </div>
-<div id="outline-container-org3fa1476" class="outline-3">
-<h3 id="org3fa1476"><span class="section-number-3">2.13.</span> Open fancy <i>dashboard</i> on startup</h3>
-<div class="outline-text-3" id="text-2-13">
+<div id="outline-container-orgb2e4735" class="outline-3">
+<h3 id="orgb2e4735"><span class="section-number-3">2.14.</span> Open fancy <i>dashboard</i> on startup</h3>
+<div class="outline-text-3" id="text-2-14">
 <p>
 Usually IDEs have a welcome screen that shows recent projects etc. I
 found <a href="https://github.com/emacs-dashboard/emacs-dashboard">dashboard</a> package that does the same for EMACS.
@@ -2151,16 +2220,16 @@ found <a href="https://github.com/emacs-dashboard/emacs-dashboard">dashboard</a>
 </div>
 </div>
 </div>
-<div id="outline-container-orgf721bd7" class="outline-2">
-<h2 id="orgf721bd7"><span class="section-number-2">3.</span> Make it work with&#x2026;</h2>
+<div id="outline-container-org9ec9718" class="outline-2">
+<h2 id="org9ec9718"><span class="section-number-2">3.</span> Make it work with&#x2026;</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Now it's time to add support for specific languages and tools. I
 prefer to configure them in separate subsections.
 </p>
 </div>
-<div id="outline-container-orgd652324" class="outline-3">
-<h3 id="orgd652324"><span class="section-number-3">3.1.</span> Nix</h3>
+<div id="outline-container-org6e55c6f" class="outline-3">
+<h3 id="org6e55c6f"><span class="section-number-3">3.1.</span> Nix</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 I use <a href="https://nixos.org/">nix</a> for development shells and declarative package &amp; dotfiles
@@ -2181,8 +2250,8 @@ management.
 </div>
 </div>
 </div>
-<div id="outline-container-orgf0a0014" class="outline-3">
-<h3 id="orgf0a0014"><span class="section-number-3">3.2.</span> Elixir</h3>
+<div id="outline-container-org2d91bab" class="outline-3">
+<h3 id="org2d91bab"><span class="section-number-3">3.2.</span> Elixir</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 <a href="https://elixir-lang.org/">Elixir</a> is my favourite programming language. I prefer to use
@@ -2282,8 +2351,8 @@ heex-ts-mode
 </div>
 </div>
 </div>
-<div id="outline-container-org50231da" class="outline-3">
-<h3 id="org50231da"><span class="section-number-3">3.3.</span> EMACS Lisp</h3>
+<div id="outline-container-org93e244c" class="outline-3">
+<h3 id="org93e244c"><span class="section-number-3">3.3.</span> EMACS Lisp</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 This whole configuration is about EMACS Lisp, so I need to take care
@@ -2297,8 +2366,8 @@ must have for parentheses-heavy language.
 </div>
 </div>
 </div>
-<div id="outline-container-orgc487d5f" class="outline-3">
-<h3 id="orgc487d5f"><span class="section-number-3">3.4.</span> Ruby</h3>
+<div id="outline-container-org93189df" class="outline-3">
+<h3 id="org93189df"><span class="section-number-3">3.4.</span> Ruby</h3>
 <div class="outline-text-3" id="text-3-4">
 <p>
 <a href="https://www.ruby-lang.org/en/">Ruby</a> was my favorite programming language before Elixir. I still use
@@ -2349,8 +2418,8 @@ Language-specific leader keybindings:
 </div>
 </div>
 </div>
-<div id="outline-container-org2d17626" class="outline-3">
-<h3 id="org2d17626"><span class="section-number-3">3.5.</span> JSON</h3>
+<div id="outline-container-org38d2d1c" class="outline-3">
+<h3 id="org38d2d1c"><span class="section-number-3">3.5.</span> JSON</h3>
 <div class="outline-text-3" id="text-3-5">
 <p>
 JSON files are everywhere! I prefer to use tree-sitter-based mode
@@ -2363,8 +2432,8 @@ instead of built-in <code>js-json-mode</code>.
 </div>
 </div>
 </div>
-<div id="outline-container-org58052be" class="outline-3">
-<h3 id="org58052be"><span class="section-number-3">3.6.</span> YAML</h3>
+<div id="outline-container-orgbf0d305" class="outline-3">
+<h3 id="orgbf0d305"><span class="section-number-3">3.6.</span> YAML</h3>
 <div class="outline-text-3" id="text-3-6">
 <p>
 YAML files are everywhere too! I prefer to use built-in
@@ -2377,8 +2446,8 @@ tree-sitter-based mode.
 </div>
 </div>
 </div>
-<div id="outline-container-org5a52960" class="outline-3">
-<h3 id="org5a52960"><span class="section-number-3">3.7.</span> ORG</h3>
+<div id="outline-container-org66d58e7" class="outline-3">
+<h3 id="org66d58e7"><span class="section-number-3">3.7.</span> ORG</h3>
 <div class="outline-text-3" id="text-3-7">
 <p>
 <a href="https://orgmode.org/">Org-mode</a> is the decent way to write notes, documentation and even this
@@ -2450,8 +2519,8 @@ Snippets (<code>templates.eld</code>):
 </div>
 </div>
 </div>
-<div id="outline-container-org8aed73a" class="outline-3">
-<h3 id="org8aed73a"><span class="section-number-3">3.8.</span> Markdown</h3>
+<div id="outline-container-org9baf50e" class="outline-3">
+<h3 id="org9baf50e"><span class="section-number-3">3.8.</span> Markdown</h3>
 <div class="outline-text-3" id="text-3-8">
 <p>
 Markdown is (the most?) popular format for technical documentation.
@@ -2517,8 +2586,8 @@ Last but not least - mode-specific keybindings:
 </div>
 </div>
 </div>
-<div id="outline-container-org3bd73f2" class="outline-3">
-<h3 id="org3bd73f2"><span class="section-number-3">3.9.</span> Docker</h3>
+<div id="outline-container-orgde7a6f7" class="outline-3">
+<h3 id="orgde7a6f7"><span class="section-number-3">3.9.</span> Docker</h3>
 <div class="outline-text-3" id="text-3-9">
 <p>
 It's hard to avoid <a href="https://www.docker.com/">Docker</a> in modern development. Unfortunately. So I
@@ -2558,8 +2627,8 @@ images using some EMACS UI.
 </div>
 </div>
 </div>
-<div id="outline-container-org22f777b" class="outline-3">
-<h3 id="org22f777b"><span class="section-number-3">3.10.</span> Earthly</h3>
+<div id="outline-container-org702b0c4" class="outline-3">
+<h3 id="org702b0c4"><span class="section-number-3">3.10.</span> Earthly</h3>
 <div class="outline-text-3" id="text-3-10">
 <p>
 <a href="https://earthly.dev/">Earthly</a> is a modern mix of Make and Docker. I used it in some of my
@@ -2573,8 +2642,8 @@ projects.
 </div>
 </div>
 </div>
-<div id="outline-container-org4a9a93f" class="outline-3">
-<h3 id="org4a9a93f"><span class="section-number-3">3.11.</span> Terrafrom</h3>
+<div id="outline-container-org26a20b1" class="outline-3">
+<h3 id="org26a20b1"><span class="section-number-3">3.11.</span> Terrafrom</h3>
 <div class="outline-text-3" id="text-3-11">
 <p>
 <a href="https://www.terraform.io/">Terraform</a> is my favourite "infrastructure as code" tool.
@@ -2596,8 +2665,8 @@ TODO: <a href="https://github.com/MichaHoffmann/tree-sitter-hcl">use tree-sitter
 </p>
 </div>
 </div>
-<div id="outline-container-org2d61175" class="outline-3">
-<h3 id="org2d61175"><span class="section-number-3">3.12.</span> Go</h3>
+<div id="outline-container-org6d0ee23" class="outline-3">
+<h3 id="org6d0ee23"><span class="section-number-3">3.12.</span> Go</h3>
 <div class="outline-text-3" id="text-3-12">
 <p>
 I can write <a href="https://go.dev/">Go</a> code. And sometimes I need to do it. Built-in
@@ -2641,8 +2710,8 @@ Language-specific leader keybindings:
 </div>
 </div>
 </div>
-<div id="outline-container-org31734c4" class="outline-3">
-<h3 id="org31734c4"><span class="section-number-3">3.13.</span> Python</h3>
+<div id="outline-container-orgd1fd1f5" class="outline-3">
+<h3 id="orgd1fd1f5"><span class="section-number-3">3.13.</span> Python</h3>
 <div class="outline-text-3" id="text-3-13">
 <p>
 I can write Python. And sometimes I need to do it. Built-in
@@ -2657,8 +2726,8 @@ tree-sitter-based mode is my choice.
 </div>
 </div>
 </div>
-<div id="outline-container-org3c3d679" class="outline-3">
-<h3 id="org3c3d679"><span class="section-number-3">3.14.</span> Mastodon</h3>
+<div id="outline-container-org98e220d" class="outline-3">
+<h3 id="org98e220d"><span class="section-number-3">3.14.</span> Mastodon</h3>
 <div class="outline-text-3" id="text-3-14">
 <p>
 I want to try to use <a href="https://mastodon.social/explore">Mastodon</a> because I don't like Twitter or Facebook
@@ -2687,8 +2756,8 @@ Default timeline is not fancy enough for me.
 </div>
 </div>
 </div>
-<div id="outline-container-org7b19235" class="outline-3">
-<h3 id="org7b19235"><span class="section-number-3">3.15.</span> JS/TS(X)</h3>
+<div id="outline-container-orgafd7317" class="outline-3">
+<h3 id="orgafd7317"><span class="section-number-3">3.15.</span> JS/TS(X)</h3>
 <div class="outline-text-3" id="text-3-15">
 <p>
 Sadly, the most popular programming language is
@@ -2714,7 +2783,7 @@ a support for it.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Roman Kolesnev</p>
-<p class="date">Created: 2024-05-22 Wed 01:00</p>
+<p class="date">Created: 2024-05-22 Wed 16:03</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -1092,7 +1092,7 @@ them at once.
   "a" '(:ignore t :which-key "app")
   "a u" #'undo-tree-visualize
 
-  "b" '(:ignore t :which-key "buffer/bookmark")
+  "b" '(:ignore t :which-key "buffer")
   "b b" #'consult-buffer
   "b k" #'my-kill-this-buffer
   "b K" #'my-force-kill-this-buffer
@@ -1101,10 +1101,11 @@ them at once.
   "b p" #'previous-buffer
   "b i" #'ibuffer
 
-  "b m" #'bookmark-set
-  "b SPC" #'consult-bookmark
+  "B" '(:ignore t :which-key "bookmark")
+  "B m" #'bookmark-set
+  "B B" #'consult-bookmark
   "b x" #'bookmark-delete
-  "b C-x" #'bookmark-delete-all
+  "B C-x" #'bookmark-delete-all
 
   "b d" #'dired-jump
 
@@ -1202,6 +1203,67 @@ frontend and [[https://rgel.readthedocs.io/en/latest/][rg]] as a tool for more c
 (my-leader-def
   "p s" #'consult-ripgrep
   "p S" #'rg-menu)
+#+END_SRC
+
+** Saving and loading /bookmark/ lists
+I usually use bookmarks to remember places in the code that related to
+my current task. When I work on multiple things during the day I do
+not want to mix bookmarks for different tasks. So I need some bookmark
+lists management solution.
+
+#+BEGIN_SRC emacs-lisp
+(defvar my-bookmarks-directory
+  (expand-file-name "bookmarks" no-littering-var-directory)
+  "Directory where bookmark lists are stored.")
+
+(unless (file-directory-p my-bookmarks-directory)
+  (make-directory my-bookmarks-directory))
+
+(defun my-bookmark-list--files ()
+  "Return a list of bookmark files in `my-bookmarks-directory`."
+  (directory-files my-bookmarks-directory t ".*\\.el"))
+
+(defun my-bookmark-list-save ()
+  "Prompt for a bookmark file and save bookmarks to it."
+  (interactive)
+  (let* ((selected-file (consult--read
+                         (my-bookmark-list--files)
+                         :prompt "Save bookmarks to file: "
+                         :require-match nil
+                         :category 'file))
+         (selected-file-with-ext (if (string-suffix-p ".el" selected-file t)
+                                     selected-file
+                                   (concat selected-file ".el")))
+         (file (expand-file-name selected-file-with-ext my-bookmarks-directory)))
+    (bookmark-write-file file)))
+
+(defun my-bookmark-list-load ()
+  "Prompt for a bookmark file and load bookmarks from it."
+  (interactive)
+  (let* ((selected-file (consult--read
+                         (my-bookmark-list--files)
+                         :prompt "Load bookmarks from file: "
+                         :require-match t
+                         :category 'file))
+         (file (expand-file-name selected-file my-bookmarks-directory)))
+    (bookmark-load file)))
+         
+(defun my-bookmark-list-delete ()
+  "Prompt for a bookmark file and delete it."
+  (interactive)
+  (let* ((selected-file (consult--read
+                         (my-bookmark-list--files)
+                         :prompt "Delete bookmark file: "
+                         :require-match t
+                         :category 'file))
+         (file (expand-file-name selected-file my-bookmarks-directory)))
+    (delete-file file)
+    (message "Deleted: %s" file)))
+
+(my-leader-def
+  "B s" #'my-bookmark-list-save
+  "B l" #'my-bookmark-list-load
+  "B D" #'my-bookmark-list-delete)
 #+END_SRC
 
 ** Fast access to /favourite files/
