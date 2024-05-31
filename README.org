@@ -2043,7 +2043,7 @@ a support for it.
 
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'auto-mode-alist `(,(rx ".js" (? "x") eos) . js-ts-mode))
-(add-hook 'js-ts-mode #'eglot-ensure)
+(add-hook 'js-ts-mode-hook #'eglot-ensure)
 
 (add-to-list 'auto-mode-alist `(,(rx ".ts" eos) . typescript-ts-mode))
 (add-hook 'typescript-ts-mode-hook #'eglot-ensure)
