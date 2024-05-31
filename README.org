@@ -1492,6 +1492,18 @@ LSP-powered project-wide symbol search can be very useful:
   "j SPC" #'consult-eglot-symbols)
 #+END_SRC
 
+By default ~xref~ reuses the same buffer for results. But I want to
+create a new xref buffer for each "find references" command.
+
+#+BEGIN_SRC emacs-lisp
+(defun my-xref-find-references-with-new-buffer (orig-fun &rest args)
+  "An around advice to create a new xref buffer for each `xref-find-references' command."
+  (let ((xref-buffer-name (format "%s %s" xref-buffer-name (symbol-at-point))))
+    (apply orig-fun args)))
+
+(advice-add 'xref-find-references :around #'my-xref-find-references-with-new-buffer)
+#+END_SRC
+
 ** Retrieve secrets from /passwod manager/
 For CLI apps and EMACS I prefer to use [[https://www.passwordstore.org/][pass]] as a password manager
 instead of 1Password or alternatives. I need to have a convinient way
