@@ -683,7 +683,7 @@ See `my-split-window-aspect-ratio-threshold'."
 
 (defvar my-favourite-files
   '("~/.emacs.d/README.org"
-    "~/Work/onboarding.org"
+    "~/Work/ongoing.org"
     "~/Desktop/TODO.org"
     "~/Desktop/highlights.org")
   "Important files list")
@@ -806,6 +806,13 @@ See `my-split-window-aspect-ratio-threshold'."
 
 (my-leader-def
   "j SPC" #'consult-eglot-symbols)
+
+(defun my-xref-find-references-with-new-buffer (orig-fun &rest args)
+  "An around advice to create a new xref buffer for each `xref-find-references' command."
+  (let ((xref-buffer-name (format "%s %s" xref-buffer-name (symbol-at-point))))
+    (apply orig-fun args)))
+
+(advice-add 'xref-find-references :around #'my-xref-find-references-with-new-buffer)
 
 (defun my-get-pass (name)
   "Retrieve secret under NAME from Pass."
@@ -1059,7 +1066,7 @@ See `my-split-window-aspect-ratio-threshold'."
 (mastodon-alt-tl-activate)
 
 (add-to-list 'auto-mode-alist `(,(rx ".js" (? "x") eos) . js-ts-mode))
-(add-hook 'js-ts-mode #'eglot-ensure)
+(add-hook 'js-ts-mode-hook #'eglot-ensure)
 
 (add-to-list 'auto-mode-alist `(,(rx ".ts" eos) . typescript-ts-mode))
 (add-hook 'typescript-ts-mode-hook #'eglot-ensure)
