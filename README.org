@@ -1273,7 +1273,7 @@ easy access to them.
 #+BEGIN_SRC emacs-lisp
 (defvar my-favourite-files
   '("~/.emacs.d/README.org"
-    "~/Work/onboarding.org"
+    "~/Work/ongoing.org"
     "~/Desktop/TODO.org"
     "~/Desktop/highlights.org")
   "Important files list")
